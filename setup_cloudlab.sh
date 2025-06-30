@@ -4,8 +4,8 @@
 
 sudo apt update && sudo apt upgrade
 sudo apt install \
+    build-essential \
     vim \
-    tmux \
     htop \
     jq \
     numactl \
@@ -16,6 +16,9 @@ sudo apt install \
     clangd \
     ninja-build \
     python3-venv \
+    libevent-dev ncurses-dev \
+    bison \
+    pkg-config \
     linux-tools-common linux-tools-generic linux-tools-`uname -r`
 
 if [ ! -f ~/.ssh/id_ed25519 ]; then
@@ -52,9 +55,20 @@ export PATH=$PATH:/usr/local/go/bin
 echo 'export PATH=$PATH:/usr/local/go/bin' >> .zshenv
 
 go install github.com/jesseduffield/lazygit@latest
+export PATH=$PATH:~/go/bin
+echo 'export PATH=$PATH:~/go/bin' >> .zshenv
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
+
+git clone https://github.com/tmux/tmux.git
+cd tmux
+git checkout 3.5a
+sh autogen.sh
+./configure
+make && sudo make install
+cd ~
+rm -rf tmux
 
 git clone git@github.com:neovim/neovim.git
 cd neovim
@@ -66,6 +80,8 @@ rm -rf neovim
 
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 mkdir repos && cd repos
 git clone git@github.com:inceisciberkay/dotfiles.git
