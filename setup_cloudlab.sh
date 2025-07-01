@@ -10,6 +10,7 @@ sudo apt install \
     jq \
     numactl libnuma-dev \
     hwloc \
+    msr-tools \
     tree \
     stow \
     cmake \
