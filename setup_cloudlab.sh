@@ -8,7 +8,7 @@ sudo apt install \
     vim \
     htop \
     jq \
-    numactl \
+    numactl libnuma-dev \
     hwloc \
     tree \
     stow \
