@@ -11,6 +11,7 @@ sudo apt install \
     numactl libnuma-dev \
     hwloc \
     msr-tools \
+    cpufrequtils \
     tree \
     stow \
     cmake \
