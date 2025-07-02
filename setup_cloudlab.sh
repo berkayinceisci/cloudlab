@@ -46,21 +46,19 @@ nvm install 22
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 . "$HOME/.cargo/env"
-echo '. "$HOME/.cargo/env"' > .zshenv
+echo '. "$HOME/.cargo/env"' > ~/.zshenv
 cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
 cargo install --locked tlrc
 
 wget https://go.dev/dl/go1.24.4.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.4.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
-echo 'export PATH=$PATH:/usr/local/go/bin' >> .zshenv
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.zshenv
 
-go install github.com/jesseduffield/lazygit@latest
 export PATH=$PATH:~/go/bin
-echo 'export PATH=$PATH:~/go/bin' >> .zshenv
-
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+echo 'export PATH=$PATH:~/go/bin' >> ~/.zshenv
+go install github.com/junegunn/fzf@latest
+go install github.com/jesseduffield/lazygit@latest
 
 git clone https://github.com/tmux/tmux.git
 cd tmux
@@ -95,4 +93,5 @@ rm *.tar.gz
 
 # ==> Settings
 
-echo -1 | sudo tee /proc/sys/kernel/perf_event_paranoid
+. "$(pwd)"/config.sh || exit
+check_conf
