@@ -61,6 +61,11 @@ set_performance_mode()
   done
 }
 
+set_cpu_freq()
+{
+  sudo cpupower frequency-set -u 2.1GHz >/dev/null 2>&1
+}
+
 set_perf_level()
 {
   echo -1 | sudo tee /proc/sys/kernel/perf_event_paranoid >/dev/null 2>&1
@@ -85,6 +90,7 @@ disable_swap()
 check_cxl_conf()
 {
   set_performance_mode
+  set_cpu_freq
   set_perf_level
   disable_nmi_watchdog
   disable_va_aslr
@@ -100,6 +106,7 @@ check_cxl_conf()
 check_conf()
 {
   set_performance_mode
+  set_cpu_freq
   set_perf_level
   disable_nmi_watchdog
   disable_va_aslr

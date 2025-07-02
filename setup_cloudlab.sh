@@ -14,6 +14,7 @@ sudo apt install \
     cpufrequtils \
     tree \
     stow \
+    gnuplot \
     cmake \
     clangd \
     ninja-build \
