@@ -20,17 +20,17 @@ sudo apt install \
     libevent-dev ncurses-dev \
     bison \
     pkg-config \
-    linux-tools-common linux-tools-generic linux-tools-`uname -r`
+    linux-tools-common linux-tools-generic linux-tools-$(uname -r)
 
 if [ ! -f ~/.ssh/id_ed25519 ]; then
     echo "Generating SSH key for Git..."
     echo -n "Enter your email for SSH key: "
     read email
     ssh-keygen -t ed25519 -C "$email" -f ~/.ssh/id_ed25519 -N ""
-    
+
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/id_ed25519
-    
+
     echo "===================================================="
     echo "Your SSH public key (copy this to GitHub/GitLab):"
     echo "===================================================="
@@ -46,17 +46,17 @@ nvm install 22
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 . "$HOME/.cargo/env"
-echo '. "$HOME/.cargo/env"' > ~/.zshenv
+echo '. "$HOME/.cargo/env"' >~/.zshenv
 cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
 cargo install --locked tlrc
 
 wget https://go.dev/dl/go1.24.4.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.4.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
-echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.zshenv
+echo 'export PATH=$PATH:/usr/local/go/bin' >>~/.zshenv
 
 export PATH=$PATH:~/go/bin
-echo 'export PATH=$PATH:~/go/bin' >> ~/.zshenv
+echo 'export PATH=$PATH:~/go/bin' >>~/.zshenv
 go install github.com/junegunn/fzf@latest
 go install github.com/jesseduffield/lazygit@latest
 
@@ -89,7 +89,6 @@ stow *
 cd ~
 
 rm *.tar.gz
-
 
 # ==> Settings
 
