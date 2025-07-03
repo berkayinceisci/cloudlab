@@ -131,4 +131,3 @@ check_conf()
   disable_swap
   create_huge_pages_local_numa
 }
-

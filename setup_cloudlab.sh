@@ -68,7 +68,7 @@ git checkout 3.5a
 sh autogen.sh
 ./configure
 make && sudo make install
-cd ~
+cd -
 rm -rf tmux
 
 git clone git@github.com:neovim/neovim.git
@@ -76,7 +76,7 @@ cd neovim
 git checkout stable
 make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
-cd ~
+cd -
 rm -rf neovim
 
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
@@ -84,11 +84,12 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
+cd ~
 mkdir repos && cd repos
 git clone git@github.com:inceisciberkay/dotfiles.git
 cd dotfiles
 stow *
-cd ~
+cd ~/cloudlab
 
 rm *.tar.gz
 
@@ -97,5 +98,5 @@ rm *.tar.gz
 sudo mkdir /dev/hugepages1G
 sudo mount -t hugetlbfs -o pagesize=1G none /dev/hugepages1G
 
-. "$(pwd)"/config.sh || exit
+. "./config.sh" || exit
 check_conf
