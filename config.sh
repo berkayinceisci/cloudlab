@@ -87,6 +87,17 @@ disable_swap()
   sudo swapoff -a
 }
 
+create_huge_pages_local_numa()
+{
+  echo 1 | sudo tee /sys/devices/system/node/node0/hugepages/hugepages-1048576kB/nr_hugepages >/dev/null 2>&1
+  echo 1 | sudo tee /sys/devices/system/node/node1/hugepages/hugepages-1048576kB/nr_hugepages >/dev/null 2>&1
+}
+
+create_huge_pages_cxl()
+{
+  echo 1 | sudo tee /sys/devices/system/node/node2/hugepages/hugepages-1048576kB/nr_hugepages >/dev/null 2>&1
+}
+
 check_cxl_conf()
 {
   set_performance_mode
@@ -101,6 +112,8 @@ check_cxl_conf()
   disable_turbo
   disable_swap
   configure_cxl_exp_cores
+  create_huge_pages_local_numa
+  create_huge_pages_cxl
 }
 
 check_conf()
@@ -116,5 +129,6 @@ check_conf()
   disable_ht
   disable_turbo
   disable_swap
+  create_huge_pages_local_numa
 }
 

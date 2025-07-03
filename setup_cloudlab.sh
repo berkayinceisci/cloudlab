@@ -94,5 +94,8 @@ rm *.tar.gz
 
 # ==> Settings
 
+sudo mkdir /dev/hugepages1G
+sudo mount -t hugetlbfs -o pagesize=1G none /dev/hugepages1G
+
 . "$(pwd)"/config.sh || exit
 check_conf
