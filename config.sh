@@ -114,6 +114,7 @@ check_cxl_conf()
   configure_cxl_exp_cores
   create_huge_pages_local_numa
   create_huge_pages_cxl
+  flush_fs_caches
 }
 
 check_conf()
@@ -130,4 +131,5 @@ check_conf()
   disable_turbo
   disable_swap
   create_huge_pages_local_numa
+  flush_fs_caches
 }
