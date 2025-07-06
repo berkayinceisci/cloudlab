@@ -42,6 +42,10 @@ if [ ! -f ~/.ssh/id_ed25519 ]; then
     read dummy
 fi
 
+if [ ! -f ~/.ssh/id_rsa ]; then
+    ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ""
+fi
+
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 . "$HOME/.nvm/nvm.sh"
 nvm install 22
