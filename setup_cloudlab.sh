@@ -24,6 +24,8 @@ sudo apt install \
     pkg-config \
     linux-tools-common linux-tools-generic linux-tools-$(uname -r)
 
+sudo apt install --reinstall linux-firmware
+
 if [ ! -f ~/.ssh/id_ed25519 ]; then
     echo "Generating SSH key for Git..."
     echo -n "Enter your email for SSH key: "
