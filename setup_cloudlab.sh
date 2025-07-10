@@ -3,7 +3,7 @@
 # ==> Packages
 
 sudo apt update && sudo apt upgrade
-sudo apt install \
+sudo apt install -y \
     build-essential \
     vim \
     htop \
@@ -15,13 +15,14 @@ sudo apt install \
     tree \
     stow \
     gnuplot \
-    cmake \
     clangd \
-    ninja-build \
     python3-venv \
     libevent-dev ncurses-dev \
     bison \
     pkg-config \
+    sysstat \
+    i7z \
+    cmake libncurses5-dev ninja-build meson \
     linux-tools-common linux-tools-generic linux-tools-$(uname -r)
 
 sudo apt install --reinstall linux-firmware
