@@ -18,6 +18,7 @@ sudo apt install -y \
     clangd \
     python3-venv \
     libevent-dev ncurses-dev \
+    libelf-dev libdw-dev libbfd-dev \
     bison \
     pkg-config \
     sysstat \
