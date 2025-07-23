@@ -81,6 +81,18 @@ rm *.tar.gz
 
 echo "Packages are installed"
 
+# ==> Benchmarks
+
+sudo chown -R $USER /tdata
+
+cd ~/repos
+git clone https://github.com/sbeamer/gapbs.git
+cd gapbs
+make bench-graphs GRAPH_DIR=/tdata RAW_GRAPH_DIR=/tdata/raw
+cd ~/cloudlab
+
+echo "Benchmarks are installed"
+
 # ==> Settings
 
 sudo mkdir /dev/hugepages1G
