@@ -54,7 +54,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 . "$HOME/.nvm/nvm.sh"
 nvm install 22
 
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 . "$HOME/.cargo/env"
 echo '. "$HOME/.cargo/env"' >~/.zshenv
 cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
@@ -79,7 +79,7 @@ make && sudo make install
 cd -
 rm -rf tmux
 
-git clone git@github.com:neovim/neovim.git
+git clone https://github.com/neovim/neovim.git
 cd neovim
 git checkout stable
 make CMAKE_BUILD_TYPE=RelWithDebInfo
@@ -101,6 +101,8 @@ cd ~/cloudlab
 
 rm *.tar.gz
 
+echo "Packages are installed"
+
 # ==> Settings
 
 sudo mkdir /dev/hugepages1G
@@ -108,3 +110,5 @@ sudo mount -t hugetlbfs -o pagesize=1G none /dev/hugepages1G
 
 . "./config.sh" || exit
 check_conf
+
+echo "Settings are applied"
