@@ -20,6 +20,7 @@ sudo apt install -y \
     libevent-dev ncurses-dev \
     libelf-dev libdw-dev libbfd-dev \
     libpci-dev \
+    acpica-tools \
     bison \
     pkg-config \
     sysstat \
