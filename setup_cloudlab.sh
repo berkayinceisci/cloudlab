@@ -27,6 +27,7 @@ sudo apt install -y \
     sysstat \
     i7z \
     cmake libncurses5-dev ninja-build meson \
+    automake \
     linux-tools-common linux-tools-generic linux-tools-$(uname -r)
 
 sudo apt install --reinstall linux-firmware
