@@ -72,6 +72,8 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
 cd ~
 mkdir repos && cd repos
 git clone git@github.com:inceisciberkay/dotfiles.git
