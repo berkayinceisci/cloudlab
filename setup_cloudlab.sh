@@ -78,7 +78,7 @@ ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 cd ~
 mkdir repos && cd repos
-git clone git@github.com:inceisciberkay/dotfiles.git
+git clone git@github.com:berkayinceisci/dotfiles.git
 cd dotfiles
 stow *
 cd ~/cloudlab
