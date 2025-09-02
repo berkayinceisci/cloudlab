@@ -2,6 +2,7 @@
 
 # ==> Packages
 
+sudo add-apt-repository -y ppa:git-core/ppa
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y \
     zsh \
@@ -41,6 +42,12 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 echo '. "$HOME/.cargo/env"' >~/.zshenv
 cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
 cargo install --locked tlrc
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+\. "$HOME/.nvm/nvm.sh"
+nvm install 22
+
+npm install -g @anthropic-ai/claude-code
 
 wget https://go.dev/dl/go1.24.4.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.4.linux-amd64.tar.gz
