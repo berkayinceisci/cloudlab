@@ -14,7 +14,7 @@ if [ ! -f ~/.ssh/id_ed25519 ]; then
     echo "===================================================="
     cat ~/.ssh/id_ed25519.pub
     echo "===================================================="
-    echo "Add this key to your Git provider, then press Enter to continue..."
+    echo "Add this key to -- https://github.com/settings/ssh/new -- then press Enter to continue..."
     read dummy
 fi
 
