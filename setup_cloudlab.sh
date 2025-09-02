@@ -90,6 +90,8 @@ cd dotfiles
 stow *
 cd ~/cloudlab
 
+mkdir -p ~/.local/bin
+
 rm *.tar.gz
 
 echo "Packages are installed"
