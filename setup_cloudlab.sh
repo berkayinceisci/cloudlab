@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # ==> Packages
+bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+atuin login
+atuin sync
 
 sudo add-apt-repository -y ppa:git-core/ppa
 sudo apt update && sudo apt upgrade -y
