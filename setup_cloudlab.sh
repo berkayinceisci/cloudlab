@@ -2,6 +2,7 @@
 
 # ==> Packages
 bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+source $HOME/.atuin/bin/env
 atuin login
 atuin sync
 
