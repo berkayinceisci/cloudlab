@@ -1,4 +1,6 @@
 #!/bin/bash
+export DEBIAN_FRONTEND=noninteractive
+export DEBCONF_NONINTERACTIVE_SEEN=true
 
 # ==> Packages
 bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
@@ -8,7 +10,7 @@ atuin sync
 
 sudo add-apt-repository -y ppa:git-core/ppa
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y \
+sudo apt install -y -o Dpkg::Options::="--force-confnew"\
     zsh \
     build-essential \
     vim \
