@@ -34,7 +34,7 @@ cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
 cargo install --locked tlrc
 
 # go
-curl -sSL https://git.io/g-install | sh -s
+curl -sSL https://git.io/g-install | sh -s -- -y
 # todo: ensure go is visible in the current session
 go install github.com/junegunn/fzf@latest
 go install github.com/jesseduffield/lazygit@latest
