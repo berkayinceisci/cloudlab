@@ -87,5 +87,6 @@ stow *
 cd ~/cloudlab
 
 rm *.tar.gz
+rm *.tar.xz
 
 echo "Local packages are installed"
