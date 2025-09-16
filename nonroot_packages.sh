@@ -2,13 +2,47 @@
 
 # ==> Packages
 
-mkdir -p ~/.local/bin
+mkdir -p ~/.local
+export PATH="$HOME/.local/bin:$PATH"
+
+# stow
+wget https://ftp.gnu.org/gnu/stow/stow-2.3.1.tar.gz
+tar -xzf stow-2.3.1.tar.gz
+cd stow-2.3.1
+./configure --prefix=$HOME/.local
+make
+make install
+cd -
+rm -rf stow-2.3.1
+
+# dotfiles
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+cd ~
+mkdir repos && cd repos
+git clone git@github.com:berkayinceisci/dotfiles.git
+cd dotfiles
+stow *
+cd ~/cloudlab
+
+# ncurses library
+wget https://ftp.gnu.org/gnu/ncurses/ncurses-6.4.tar.gz
+tar -xzf ncurses-6.4.tar.gz
+cd ncurses-6.4
+./configure --prefix=$HOME/.local --with-shared --enable-widec
+make
+make install
+cd -
+rm -rf ncurses-6.4
+
+echo 'export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"' >> ~/.profile
+echo 'export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ~/.profile
 
 # zsh
 wget https://sourceforge.net/projects/zsh/files/zsh/5.9/zsh-5.9.tar.xz/download -O zsh-5.9.tar.xz
 tar -xf zsh-5.9.tar.xz
 cd zsh-5.9
-./configure --prefix=$HOME/.local
+./configure --prefix=$HOME/.local CPPFLAGS="-I$HOME/.local/include" LDFLAGS="-L$HOME/.local/lib" --enable-multibyte
 make
 make install
 cd -
@@ -17,8 +51,7 @@ rm -rf zsh-5.9
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
 
-echo '[ -f $HOME/.local/bin/zsh ] && exec $HOME/bin/zsh -l' > ~/.profile
-source ~/.profile
+echo '[ -f $HOME/.local/bin/zsh ] && exec $HOME/.local/bin/zsh -l' > ~/.profile
 
 # atuin
 bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
@@ -29,7 +62,6 @@ atuin sync
 # rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 . "$HOME/.cargo/env"
-# echo '. "$HOME/.cargo/env"' > ~/.zshenv
 cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
 cargo install --locked tlrc
 
@@ -65,26 +97,6 @@ make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=$HOME/.local
 make install
 cd -
 rm -rf neovim
-
-# stow
-wget https://ftp.gnu.org/gnu/stow/stow-2.3.1.tar.gz
-tar -xzf stow-2.3.1.tar.gz
-cd stow-2.3.1
-./configure --prefix=$HOME/.local
-make
-make install
-cd -
-rm -rf stow-2.3.1
-
-# dotfiles
-ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-cd ~
-mkdir repos && cd repos
-git clone git@github.com:berkayinceisci/dotfiles.git
-cd dotfiles
-stow *
-cd ~/cloudlab
 
 rm *.tar.gz
 rm *.tar.xz
