@@ -66,8 +66,13 @@ cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
 cargo install --locked tlrc
 
 # go
-curl -sSL https://git.io/g-install | sh -s -- -y
-# todo: ensure go is visible in the current session
+rm -rf ~/.local/go
+wget https://golang.org/dl/go1.25.1.linux-amd64.tar.gz
+tar -C ~/.local -xzf go1.25.1.linux-amd64.tar.gz
+export PATH="$HOME/.local/go/bin:$PATH"
+export GOROOT="$HOME/.local/go"
+export GOPATH="$HOME/go"
+export PATH="$HOME/go/bin:$PATH"
 go install github.com/junegunn/fzf@latest
 go install github.com/jesseduffield/lazygit@latest
 
