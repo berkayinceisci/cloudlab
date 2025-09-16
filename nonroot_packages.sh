@@ -24,11 +24,10 @@ fi
 # dotfiles
 if [ ! -d "$HOME/dotfiles" ]; then
     echo "Setting up dotfiles..."
-    cd ~
-    git clone git@github.com:berkayinceisci/dotfiles.git
-    cd dotfiles
+    git clone git@github.com:berkayinceisci/dotfiles.git ~/dotfiles
+    cd ~/dotfiles
     stow *
-    cd ~/cloudlab
+    cd -
 else
     echo "dotfiles already exist, skipping..."
 fi
