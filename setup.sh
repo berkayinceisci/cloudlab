@@ -1,7 +1,7 @@
 #!/bin/bash
 
-./ssh_keys
-./nonroot_packages
-./root_packages
-./benchmarks
-./settings
+./ssh_keys.sh
+./nonroot_packages.sh
+./root_packages.sh
+./benchmarks.sh
+./settings.sh
