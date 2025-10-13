@@ -31,6 +31,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     i7z \
     cmake libncurses5-dev ninja-build meson \
     automake \
+    xdg-utils \
     linux-tools-common linux-tools-generic linux-tools-$(uname -r)
 
 sudo apt install --reinstall linux-firmware
