@@ -21,17 +21,6 @@ else
     echo "stow already installed, skipping..."
 fi
 
-# dotfiles
-if [ ! -d "$HOME/dotfiles" ]; then
-    echo "Setting up dotfiles..."
-    git clone git@github.com:berkayinceisci/dotfiles.git ~/dotfiles
-    cd ~/dotfiles
-    stow *
-    cd -
-else
-    echo "dotfiles already exist, skipping..."
-fi
-
 # ncurses library
 if ! command -v ncursesw6-config &> /dev/null && [ ! -f "$HOME/.local/lib/pkgconfig/ncursesw.pc" ]; then
     echo "Installing ncurses..."
@@ -60,24 +49,13 @@ if ! command -v zsh &> /dev/null; then
     make install
     cd -
     rm -rf zsh-5.9
-
-    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
     echo '[ -f $HOME/.local/bin/zsh ] && exec $HOME/.local/bin/zsh -l' > ~/.profile
 else
     echo "zsh already installed, skipping..."
 fi
 
-# atuin
-if ! command -v atuin &> /dev/null; then
-    echo "Installing atuin..."
-    bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
-    . "$HOME/.atuin/bin/env"
-    atuin login
-    atuin sync
-else
-    echo "atuin already installed, skipping..."
-fi
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions &>/dev/null
+git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting &>/dev/null
 
 # rust
 if ! command -v rustc &> /dev/null || ! command -v cargo &> /dev/null; then
@@ -85,11 +63,12 @@ if ! command -v rustc &> /dev/null || ! command -v cargo &> /dev/null; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     . "$HOME/.cargo/env"
 
-    cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
     cargo install --locked tlrc
 else
     echo "rust already installed, skipping installation..."
 fi
+
+cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
 
 # go
 if ! command -v go &> /dev/null; then
@@ -101,12 +80,12 @@ if ! command -v go &> /dev/null; then
     export GOROOT="$HOME/.local/go"
     export GOPATH="$HOME/go"
     export PATH="$HOME/go/bin:$PATH"
-
-    go install github.com/junegunn/fzf@latest
-    go install github.com/jesseduffield/lazygit@latest
 else
     echo "go already installed, skipping installation..."
 fi
+
+go install github.com/junegunn/fzf@latest
+go install github.com/jesseduffield/lazygit@latest
 
 # npm/nvm
 if ! command -v nvm &> /dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
@@ -131,11 +110,11 @@ if ! command -v tmux &> /dev/null; then
     make && make install
     cd -
     rm -rf tmux
-
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 else
     echo "tmux already installed, skipping..."
 fi
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &>/dev/null
 
 # neovim
 if ! command -v nvim &> /dev/null; then
@@ -149,6 +128,28 @@ if ! command -v nvim &> /dev/null; then
     rm -rf neovim
 else
     echo "neovim already installed, skipping..."
+fi
+
+# dotfiles
+if [ ! -d "$HOME/dotfiles" ]; then
+    echo "Setting up dotfiles..."
+    git clone git@github.com:berkayinceisci/dotfiles.git ~/dotfiles
+    cd ~/dotfiles
+    stow *
+    cd -
+else
+    echo "dotfiles already exist, skipping..."
+fi
+
+# atuin
+if ! command -v atuin &> /dev/null; then
+    echo "Installing atuin..."
+    bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+    . "$HOME/.atuin/bin/env"
+    atuin login
+    atuin sync
+else
+    echo "atuin already installed, skipping..."
 fi
 
 rm -f *.tar.gz *.tar.xz
