@@ -10,3 +10,6 @@ fi
 ./root_packages.sh
 ./benchmarks.sh
 ./settings.sh
+
+# commands expecting user input
+atuin login && atuing sync
