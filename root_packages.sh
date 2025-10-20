@@ -34,6 +34,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     flex bison libslang2-dev libiberty-dev libzstd-dev libcap-dev libbabeltrace-ctf-dev libunwind-dev systemtap-sdt-dev \
     python3-dev libtraceevent-dev libdebuginfod-dev libperl-dev llvm-dev libcapstone-dev libpfm4-dev \
     clang \
+    libssl-dev \
     linux-tools-common linux-tools-generic linux-tools-$(uname -r)
 
 sudo apt install --reinstall linux-firmware
