@@ -15,9 +15,14 @@ LATEST_TAG=$(git ls-remote --tags --sort='v:refname' $REPO_URL | \
              tail -n1 | \
              cut -d'/' -f3)
 git clone --depth 1 --branch $LATEST_TAG $REPO_URL
-cd linux/tools/perf
+cd linux
+cp /boot/config-$(uname -r) .config
+make olddefconfig
 make -j$(nproc)
-cd -
+cd tools/perf
+make -j$(nproc)
+
+cd /tdata
 
 # gapbs
 git clone https://github.com/sbeamer/gapbs.git
