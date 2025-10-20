@@ -27,7 +27,7 @@ make -j$(nproc)
 cd /tdata
 
 # pcm
-git clone --recurse-submodules git@github.com:intel/pcm.git
+git clone --recurse-submodules git@github.com:MoatLab/pcm.git
 cd pcm
 mkdir build
 cd build
