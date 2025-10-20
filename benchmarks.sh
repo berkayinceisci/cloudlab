@@ -26,6 +26,16 @@ make -j$(nproc)
 
 cd /tdata
 
+# pcm
+git clone --recurse-submodules git@github.com:intel/pcm.git
+cd pcm
+mkdir build
+cd build
+cmake -DCMAKE_MESSAGE_LOG_LEVEL=WARNING .. > /dev/null
+cmake --build . --parallel "$(nproc)" > /dev/null
+
+cd /tdata
+
 # gapbs
 git clone https://github.com/sbeamer/gapbs.git
 cd gapbs
