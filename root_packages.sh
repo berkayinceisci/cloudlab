@@ -25,13 +25,13 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     libelf-dev libdw-dev libbfd-dev \
     libpci-dev \
     acpica-tools \
-    bison \
     pkg-config \
     sysstat \
     i7z \
     cmake libncurses5-dev ninja-build meson \
     automake \
     xdg-utils \
+    flex bison libslang2-dev libiberty-dev libzstd-dev libcap-dev libbabeltrace-ctf-dev libunwind-dev systemtap-sdt-dev \
     linux-tools-common linux-tools-generic linux-tools-$(uname -r)
 
 sudo apt install --reinstall linux-firmware
