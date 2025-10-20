@@ -17,6 +17,8 @@ LATEST_TAG=$(git ls-remote --tags --sort='v:refname' $REPO_URL | \
 git clone --depth 1 --branch $LATEST_TAG $REPO_URL
 cd linux
 cp /boot/config-$(uname -r) .config
+sed -i 's/^CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/' .config
+sed -i 's/^CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/' .config
 make olddefconfig
 make -j$(nproc)
 cd tools/perf
