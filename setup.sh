@@ -6,6 +6,7 @@ if [ -z "$TMUX" ]; then
 fi
 
 ./ssh_keys.sh
+./dotfiles.sh
 ./nonroot_packages.sh
 ./root_packages.sh
 ./benchmarks.sh
