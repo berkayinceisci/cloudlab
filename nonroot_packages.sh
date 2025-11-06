@@ -6,21 +6,6 @@ ssh-keyscan github.com >> ~/.ssh/known_hosts
 mkdir -p ~/.local
 export PATH="$HOME/.local/bin:$PATH"
 
-# stow
-if ! command -v stow &> /dev/null; then
-    echo "Installing stow..."
-    wget https://ftp.gnu.org/gnu/stow/stow-2.3.1.tar.gz
-    tar -xzf stow-2.3.1.tar.gz
-    cd stow-2.3.1
-    ./configure --prefix=$HOME/.local
-    make
-    make install
-    cd -
-    rm -rf stow-2.3.1
-else
-    echo "stow already installed, skipping..."
-fi
-
 # ncurses library
 if ! command -v ncursesw6-config &> /dev/null && [ ! -f "$HOME/.local/lib/pkgconfig/ncursesw.pc" ]; then
     echo "Installing ncurses..."
