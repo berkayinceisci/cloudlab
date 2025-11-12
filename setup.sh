@@ -13,4 +13,4 @@ fi
 ./settings.sh
 
 # commands expecting user input
-atuin login && atuing sync
+atuin login && atuin sync

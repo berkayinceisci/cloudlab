@@ -19,6 +19,7 @@ if ! command -v ncursesw6-config &> /dev/null && [ ! -f "$HOME/.local/lib/pkgcon
     rm -rf ncurses-6.4
     echo 'export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"' >> ~/.profile
     echo 'export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ~/.profile
+    . ~/.profile
 else
     echo "ncurses already installed, skipping..."
 fi
