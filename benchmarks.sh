@@ -42,6 +42,13 @@ cd gapbs
 make
 make bench-graphs GRAPH_DIR=/tdata/graphs RAW_GRAPH_DIR=/tdata/graphs/raw
 
+cd /tdata
+
+# gapbs cmds
+git clone --depth 1 git@github.com:MoatLab/Pond.git
+mv Pond/gapbs gapbs-cmds
+rm -rf Pond
+
 cd ~/cloudlab
 
 echo "Benchmarks are installed"
