@@ -11,6 +11,7 @@ export PATH="$HOME/.local/bin:$PATH"
 ./ssh_keys.sh
 ./dotfiles.sh
 ./nonroot_packages.sh
+. ~/.zshrc
 ./root_packages.sh
 ./benchmarks.sh
 ./settings.sh
