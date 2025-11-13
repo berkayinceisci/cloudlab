@@ -5,6 +5,9 @@ if [ -z "$TMUX" ]; then
     exit 1
 fi
 
+mkdir -p ~/.local
+export PATH="$HOME/.local/bin:$PATH"
+
 ./ssh_keys.sh
 ./dotfiles.sh
 ./nonroot_packages.sh

@@ -2,9 +2,6 @@
 
 # ==> Packages
 
-mkdir -p ~/.local
-export PATH="$HOME/.local/bin:$PATH"
-
 # ncurses library
 if ! command -v ncursesw6-config &> /dev/null && [ ! -f "$HOME/.local/lib/pkgconfig/ncursesw.pc" ]; then
     echo "Installing ncurses..."
