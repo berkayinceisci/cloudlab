@@ -18,6 +18,8 @@ if [ ! -f ~/.ssh/id_ed25519 ]; then
     read dummy
 fi
 
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
 if [ ! -f ~/.ssh/id_rsa ]; then
     ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ""
 fi
