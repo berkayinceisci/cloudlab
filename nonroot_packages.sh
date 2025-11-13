@@ -2,7 +2,6 @@
 
 # ==> Packages
 
-ssh-keyscan github.com >> ~/.ssh/known_hosts
 mkdir -p ~/.local
 export PATH="$HOME/.local/bin:$PATH"
 
