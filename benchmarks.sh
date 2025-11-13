@@ -29,6 +29,7 @@ cd /tdata
 # pcm
 git clone --recurse-submodules git@github.com:MoatLab/pcm.git
 cd pcm
+sed -i '387s,^,//,' src/pcm-latency.cpp
 mkdir build
 cd build
 cmake -DCMAKE_MESSAGE_LOG_LEVEL=WARNING .. > /dev/null
