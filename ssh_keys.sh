@@ -2,13 +2,11 @@
 
 if [ ! -f ~/.ssh/id_ed25519 ]; then
     echo "Generating SSH key for Git..."
-    echo -n "Enter your email for SSH key: "
-    read email
+    email="inceisciberkay@gmail.com"
+    echo "Using email: $email"
     ssh-keygen -t ed25519 -C "$email" -f ~/.ssh/id_ed25519 -N ""
-
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/id_ed25519
-
     echo "===================================================="
     echo "Your SSH public key (copy this to GitHub/GitLab):"
     echo "===================================================="
