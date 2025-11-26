@@ -1,0 +1,277 @@
+diff --git i/src/pcm-latency.cpp w/src/pcm-latency.cpp
+index 144d6ed..94f762d 100644
+--- i/src/pcm-latency.cpp
++++ w/src/pcm-latency.cpp
+@@ -198,92 +198,92 @@ void store_latency_core(PCM *m)
+ }
+ 
+ 
+-void print_verbose(PCM *m, int ddr_ip)
++void print_verbose(PCM *m, int ddr_ip, std::ostream& out)
+ {
+-    cout << "L1 Cache Latency ============================= \n";
++    out << "L1 Cache Latency ============================= \n";
+     for (unsigned int i=0; i<m->getNumCores(); i++)
+     {
+-        cout << "Core: " << i << "\n";
+-        cout << "L1 Occupancy read: " << core_latency[0].core[i].occ_rd << "\n";
+-        cout << "L1 Inserts read: " << core_latency[0].core[i].insert_rd << "\n";
+-        cout << "\n";
++        out << "Core: " << i << "\n";
++        out << "L1 Occupancy read: " << core_latency[0].core[i].occ_rd << "\n";
++        out << "L1 Inserts read: " << core_latency[0].core[i].insert_rd << "\n";
++        out << "\n";
+     }
+     if (ddr_ip == DDR)
+     {
+-        cout << "DDR Latency =================================\n";
+-        cout << "Read Inserts Socket0: " << uncore_event[DDR].skt[0].rinsert << "\n";
+-        cout << "Read Occupancy Socket0: " << uncore_event[DDR].skt[0].roccupancy << "\n";
+-        cout << "Read Inserts Socket1: " << uncore_event[DDR].skt[1].rinsert << "\n";
+-        cout << "Read Occupancy Socket1: " << uncore_event[DDR].skt[1].roccupancy << "\n";
+-        cout << "\n";
+-        cout << "Write Inserts Socket0: " << uncore_event[DDR].skt[0].winsert << "\n";
+-        cout << "Write Occupancy Socket0: " << uncore_event[DDR].skt[0].woccupancy << "\n";
+-        cout << "Write Inserts Socket1: " << uncore_event[DDR].skt[1].winsert << "\n";
+-        cout << "Write Occupancy Socket1: " << uncore_event[DDR].skt[1].woccupancy << "\n";
++        out << "DDR Latency =================================\n";
++        out << "Read Inserts Socket0: " << uncore_event[DDR].skt[0].rinsert << "\n";
++        out << "Read Occupancy Socket0: " << uncore_event[DDR].skt[0].roccupancy << "\n";
++        out << "Read Inserts Socket1: " << uncore_event[DDR].skt[1].rinsert << "\n";
++        out << "Read Occupancy Socket1: " << uncore_event[DDR].skt[1].roccupancy << "\n";
++        out << "\n";
++        out << "Write Inserts Socket0: " << uncore_event[DDR].skt[0].winsert << "\n";
++        out << "Write Occupancy Socket0: " << uncore_event[DDR].skt[0].woccupancy << "\n";
++        out << "Write Inserts Socket1: " << uncore_event[DDR].skt[1].winsert << "\n";
++        out << "Write Occupancy Socket1: " << uncore_event[DDR].skt[1].woccupancy << "\n";
+     }
+ 
+     if (ddr_ip == PMM)
+     {
+-        cout << "PMM Latency =================================\n";
+-        cout << "Read Inserts Socket0: " << uncore_event[PMM].skt[0].rinsert << "\n";
+-        cout << "Read Occupancy Socket0: " << uncore_event[PMM].skt[0].roccupancy << "\n";
+-        cout << "Read Inserts Socket1: " << uncore_event[PMM].skt[1].rinsert << "\n";
+-        cout << "Read Occupancy Socket1: " << uncore_event[PMM].skt[1].roccupancy << "\n";
+-        cout << "\n";
+-        cout << "Write Inserts Socket0: " << uncore_event[PMM].skt[0].winsert << "\n";
+-        cout << "Write Occupancy Socket0: " << uncore_event[PMM].skt[0].woccupancy << "\n";
+-        cout << "Write Inserts Socket1: " << uncore_event[PMM].skt[1].winsert << "\n";
+-        cout << "Write Occupancy Socket1: " << uncore_event[PMM].skt[1].woccupancy << "\n";
++        out << "PMM Latency =================================\n";
++        out << "Read Inserts Socket0: " << uncore_event[PMM].skt[0].rinsert << "\n";
++        out << "Read Occupancy Socket0: " << uncore_event[PMM].skt[0].roccupancy << "\n";
++        out << "Read Inserts Socket1: " << uncore_event[PMM].skt[1].rinsert << "\n";
++        out << "Read Occupancy Socket1: " << uncore_event[PMM].skt[1].roccupancy << "\n";
++        out << "\n";
++        out << "Write Inserts Socket0: " << uncore_event[PMM].skt[0].winsert << "\n";
++        out << "Write Occupancy Socket0: " << uncore_event[PMM].skt[0].woccupancy << "\n";
++        out << "Write Inserts Socket1: " << uncore_event[PMM].skt[1].winsert << "\n";
++        out << "Write Occupancy Socket1: " << uncore_event[PMM].skt[1].woccupancy << "\n";
+     }
+ }
+ 
+-void print_ddr(PCM *m, int ddr_ip)
++void print_ddr(PCM *m, int ddr_ip, std::ostream& out)
+ {
+     if (ddr_ip == PMM)
+     {
+         if (m->PMMTrafficMetricsAvailable())
+         {
+-            cout << "PMM read Latency(ns)\n";
++            out << "PMM read Latency(ns)\n";
+             for (unsigned int n=0; n<m->getNumSockets(); n++)
+             {
+-                cout << "Socket" << n << ": " << double(uncore_event[PMM].skt[n].rlatency)/DRAMSpeed;
+-                cout << "\n";
++                out << "Socket" << n << ": " << double(uncore_event[PMM].skt[n].rlatency)/DRAMSpeed;
++                out << "\n";
+             }
+         }
+         else
+         {
+-            cout << "PMM metrics are not supported on your processor\n";
++            out << "PMM metrics are not supported on your processor\n";
+         }
+     }
+ 
+     if (ddr_ip == DDR)
+     {
+-        cout << "DDR read Latency(ns)\n";
++        out << "DDR read Latency(ns)\n";
+         for (unsigned int n=0; n<m->getNumSockets(); n++)
+         {
+-            cout << "Socket" << n << ": " << double(uncore_event[DDR].skt[n].rlatency)/DRAMSpeed;
+-            cout << "\n";
++            out << "Socket" << n << ": " << double(uncore_event[DDR].skt[n].rlatency)/DRAMSpeed;
++            out << "\n";
+         }
+     }
+ }
+ 
+-void print_core_stats(PCM *m, unsigned int core_size_per_socket, vector<vector<vector<struct core_info >>> &sk_th)
++void print_core_stats(PCM *m, unsigned int core_size_per_socket, vector<vector<vector<struct core_info >>> &sk_th, std::ostream& out)
+ {
+-    auto printHeader = []()
++    auto printHeader = [&out]()
+     {
+-        cout << "\n\n";
+-        cout << "L1 Cache Miss Latency(ns) [Adding 5 clocks for L1 Miss]\n\n";;
++        out << "\n\n";
++        out << "L1 Cache Miss Latency(ns) [Adding 5 clocks for L1 Miss]\n\n";;
+     };
+     printHeader();
+     for (unsigned int sid=0; sid<m->getNumSockets(); sid++)
+     {
+         for (unsigned int tid=0; tid< m->getThreadsPerCore(); tid++)
+         {
+-            cout << "Socket" << sid << " Thread" << tid << "     ";
++            out << "Socket" << sid << " Thread" << tid << "      ";
+         }
+     }
+ 
+-    cout << "\n-----------------------------------------------------------------------------\n";
++    out << "\n-----------------------------------------------------------------------------\n";
+ 
+     for (unsigned int cid=0; cid<core_size_per_socket; cid++)
+     {
+@@ -291,24 +291,24 @@ void print_core_stats(PCM *m, unsigned int core_size_per_socket, vector<vector<v
+         {
+             for (unsigned int tid=0; tid<m->getThreadsPerCore(); tid++)
+             {
+-                cout << "Core" << sk_th[sid][tid][cid].core_id << ": " << fixed << setprecision(2) << sk_th[sid][tid][cid].latency << "        ";
++                out << "Core" << sk_th[sid][tid][cid].core_id << ": " << fixed << setprecision(2) << sk_th[sid][tid][cid].latency << "        ";
+             }
+         }
+-        cout << "\n";
++        out << "\n";
+     }
+-    cout << "\n";
++    out << "\n";
+ 
+-    cout << "Average latency per socket";
++    out << "Average latency per socket";
+     printHeader();
+ 
+     for (unsigned int s = 0; s < m->getNumSockets(); ++s)
+     {
+-        cout << "Socket" << s << ": " << core_latency[L1].socket[s].latency << "\n";
++        out << "Socket" << s << ": " << core_latency[L1].socket[s].latency << "\n";
+     }
+-    cout << "\n";
++    out << "\n";
+ }
+ 
+-void print_all_stats(PCM *m, bool enable_pmm, bool enable_verbose)
++void print_all_stats(PCM *m, bool enable_pmm, bool enable_verbose, std::ostream& out)
+ {
+     vector < vector < vector < struct core_info >>> sk_th;
+     unsigned int sid, cid, tid;
+@@ -337,13 +337,13 @@ void print_all_stats(PCM *m, bool enable_pmm, bool enable_verbose)
+         sk_th.push_back(tmp_thread);
+     }
+ 
+-    print_core_stats(m, core_size_per_socket, sk_th);
++    print_core_stats(m, core_size_per_socket, sk_th, out);
+ 
+     if (m->DDRLatencyMetricsAvailable())
+     {
+-        print_ddr(m, enable_pmm);
++        print_ddr(m, enable_pmm, out);
+         if (enable_verbose)
+-            print_verbose(m, enable_pmm);
++            print_verbose(m, enable_pmm, out);
+     }
+ }
+ 
+@@ -384,7 +384,7 @@ void build_registers(PCM *m, PCM::ExtendedCustomCoreEventDescription conf, bool
+     if (m->getNumCores() != m->getNumOnlineCores())
+     {
+         cout << "Number of online cores should be equal to number of available cores\n";
+-        exit(EXIT_FAILURE);
++        // exit(EXIT_FAILURE);
+     }
+ 
+     //Check for Maximum Custom Core Events
+@@ -419,12 +419,24 @@ void build_registers(PCM *m, PCM::ExtendedCustomCoreEventDescription conf, bool
+     m->programServerUncoreLatencyMetrics(enable_pmm);
+ }
+ 
+-void collect_data(PCM *m, bool enable_pmm, bool enable_verbose, int delay_ms, MainLoop & mainLoop)
++void collect_data(PCM *m, bool enable_pmm, bool enable_verbose, int delay_ms, MainLoop & mainLoop, std::string output_file)
+ {
+ 
+     BeforeState = new ServerUncoreCounterState[m->getNumSockets()];
+     AfterState = new ServerUncoreCounterState[m->getNumSockets()];
+ 
++    std::ofstream file_out;
++    std::ostream* out = &std::cout;
++
++    if (!output_file.empty()) {
++        file_out.open(output_file);
++        if (file_out.is_open()) {
++            out = &file_out;
++        } else {
++            std::cerr << "Error opening output file: " << output_file << std::endl;
++            exit(EXIT_FAILURE);
++        }
++    }
+     mainLoop([&]()
+     {
+         collect_beforestate_uncore(m);
+@@ -438,8 +450,8 @@ void collect_data(PCM *m, bool enable_pmm, bool enable_verbose, int delay_ms, Ma
+ 	store_latency_uncore(m, enable_pmm, delay_ms);// 0 for DDR
+ 	store_latency_core(m);
+ 
+-        print_all_stats(m, enable_pmm, enable_verbose);
+-        std::cout << std::flush;
++        print_all_stats(m, enable_pmm, enable_verbose, *out);
++        *out << std::flush;
+         return true;
+     });
+ 
+@@ -456,6 +468,7 @@ void print_usage()
+     cout << " -silent                   => silence information output and print only measurements\n";
+     cout << " --version                 => print application version\n";
+     cout << " -v | --verbose            => verbose Output\n";
++    cout << " -o | /o | -output          => write output to a file\n";
+     cout << "\n";
+ }
+ 
+@@ -477,6 +490,7 @@ int mainThrows(int argc, char * argv[])
+     bool enable_pmm = false;
+     bool enable_verbose = false;
+     int delay_ms = 1000;
++    std::string output_file = "";
+     MainLoop mainLoop;
+     if(argc > 1) do
+     {
+@@ -507,6 +521,19 @@ int mainThrows(int argc, char * argv[])
+             enable_verbose = true;
+             continue;
+         }
++        else if (check_argument_equals(*argv, {"-o", "/o", "-output"}))
++        {
++            argv++;
++            argc--;
++            if (argc > 0) {
++                output_file = *argv;
++            } else {
++                std::cerr << "Error: Output file name missing for -o option." << std::endl;
++                exit(EXIT_FAILURE);
++            }
++            continue;
++        }
++
+     } while(argc > 1);
+ 
+     PCM::ExtendedCustomCoreEventDescription conf;
+@@ -519,7 +546,7 @@ int mainThrows(int argc, char * argv[])
+     DummySocketStates = std::make_shared<std::vector<SocketCounterState> >();
+ 
+     build_registers(m, conf, enable_pmm, enable_verbose);
+-    collect_data(m, enable_pmm, enable_verbose, delay_ms, mainLoop);
++    collect_data(m, enable_pmm, enable_verbose, delay_ms, mainLoop, output_file);
+ 
+     exit(EXIT_SUCCESS);
+ }
