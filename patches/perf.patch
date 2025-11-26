@@ -1,0 +1,21 @@
+diff --git i/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json w/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
+index da46a3aeb..396446688 100644
+--- i/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
++++ w/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
+@@ -4850,6 +4850,16 @@
+         "UMask": "0x31",
+         "Unit": "CHA"
+     },
++    {
++        "BriefDescription": "TOR Cycles; All from Local iA",
++        "Counter": "0,1,2,3",
++        "EventCode": "0x1f",
++        "EventName": "UNC_CHA_TOR_CYCLES.IA",
++        "PerPkg": "1",
++        "PublicDescription": "Increments by one each cycle if there are any entries in the TOR",
++        "UMask": "0x31",
++        "Unit": "CHA"
++    },
+     {
+         "BriefDescription": "TOR Occupancy; Hits from Local iA",
+         "Counter": "0",
