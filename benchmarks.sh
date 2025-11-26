@@ -6,7 +6,7 @@ sudo chown -R $USER /tdata
 
 cd /tdata
 
-# linux kernel, perf
+# latest linux kernel, perf
 # Define the repository URL
 REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
 LATEST_TAG=$(git ls-remote --tags --sort='v:refname' $REPO_URL | \
@@ -29,7 +29,7 @@ cd /tdata
 # pcm
 git clone --recurse-submodules git@github.com:MoatLab/pcm.git
 cd pcm
-sed -i '387s,^,//,' src/pcm-latency.cpp
+git apply ~/cloudlab/patches/pcm-latency.patch
 mkdir build
 cd build
 cmake -DCMAKE_MESSAGE_LOG_LEVEL=WARNING .. > /dev/null
