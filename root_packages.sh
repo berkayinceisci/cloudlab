@@ -31,7 +31,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     cmake libncurses5-dev ninja-build meson \
     automake \
     xdg-utils \
-    flex bison libslang2-dev libiberty-dev libzstd-dev libcap-dev libbabeltrace-ctf-dev libunwind-dev systemtap-sdt-dev \
+    flex bison libslang2-dev libiberty-dev libzstd-dev libcap-dev libbabeltrace-ctf-dev libunwind-dev systemtap-sdt-dev liblz4-tool \
     python3-dev libtraceevent-dev libdebuginfod-dev libperl-dev llvm-dev libcapstone-dev libpfm4-dev \
     clang \
     libssl-dev \
