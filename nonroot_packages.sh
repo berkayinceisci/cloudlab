@@ -1,5 +1,14 @@
 #!/bin/bash
 
+export PATH="$HOME/.local/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+if ! grep -q "PKG_CONFIG_PATH" ~/.profile; then
+    echo 'export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"' >> ~/.profile
+    echo 'export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ~/.profile
+fi
+
 # ==> Packages
 
 # ncurses library
@@ -13,9 +22,6 @@ if ! command -v ncursesw6-config &> /dev/null && [ ! -f "$HOME/.local/lib/pkgcon
     make install
     cd -
     rm -rf ncurses-6.4
-    echo 'export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"' >> ~/.profile
-    echo 'export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ~/.profile
-    . ~/.profile
 else
     echo "ncurses already installed, skipping..."
 fi
@@ -31,7 +37,7 @@ if ! command -v zsh &> /dev/null; then
     make install
     cd -
     rm -rf zsh-5.9
-    echo '[ -f $HOME/.local/bin/zsh ] && exec $HOME/.local/bin/zsh -l' > ~/.profile
+    echo '[ -f $HOME/.local/bin/zsh ] && exec $HOME/.local/bin/zsh -l' >> ~/.profile
 else
     echo "zsh already installed, skipping..."
 fi
