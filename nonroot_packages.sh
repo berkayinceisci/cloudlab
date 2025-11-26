@@ -122,21 +122,11 @@ fi
 if ! command -v atuin &> /dev/null; then
     echo "Installing atuin..."
     bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+    atuin login && atuin sync
 else
     echo "atuin already installed, skipping..."
 fi
 
 rm -f *.tar.gz *.tar.xz
-
-# dotfiles
-if [ ! -d "$HOME/dotfiles" ]; then
-    echo "Setting up dotfiles..."
-    git clone git@github.com:berkayinceisci/dotfiles.git ~/dotfiles
-    cd ~/dotfiles
-    stow *
-    cd -
-else
-    echo "dotfiles already exist, skipping..."
-fi
 
 echo "Local packages are installed"
