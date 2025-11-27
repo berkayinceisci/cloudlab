@@ -38,6 +38,13 @@ cmake --build . --parallel "$(nproc)" > /dev/null
 
 cd /tdata
 
+# silo
+git clone git@github.com:MoatLab/silo.git
+cd silo
+MODE=perf MASSTREE=1 make -j dbtest
+
+cd /tdata
+
 # gapbs
 git clone https://github.com/sbeamer/gapbs.git
 cd gapbs
