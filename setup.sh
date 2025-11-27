@@ -15,3 +15,5 @@ export PATH="$HOME/.local/bin:$PATH"
 
 ./dotfiles.sh
 ./nonroot_packages.sh
+
+crontab ./crontab.txt
