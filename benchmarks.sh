@@ -2,29 +2,6 @@
 
 # ==> Benchmarks
 
-sudo chown -R $USER /tdata
-
-cd /tdata
-
-# latest linux kernel, perf
-# Define the repository URL
-REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
-LATEST_TAG=$(git ls-remote --tags --sort='v:refname' $REPO_URL | \
-             grep -v 'rc' | \
-             grep -v '{}' | \
-             tail -n1 | \
-             cut -d'/' -f3)
-git clone --depth 1 --branch $LATEST_TAG $REPO_URL
-cd linux
-git apply ~/cloudlab/patches/perf.patch
-cp /boot/config-$(uname -r) .config
-sed -i 's/^CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/' .config
-sed -i 's/^CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/' .config
-make olddefconfig
-make -j$(nproc)
-cd tools/perf
-make -j$(nproc)
-
 cd /tdata
 
 # pcm

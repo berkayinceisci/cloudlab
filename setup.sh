@@ -5,15 +5,20 @@ if [ -z "$TMUX" ]; then
     exit 1
 fi
 
-mkdir -p ~/.local
+mkdir -p $HOME/.local
 export PATH="$HOME/.local/bin:$PATH"
 
-./ssh_keys.sh
+./ssh_keys.sh   # asks for user input
 ./root_packages.sh
+
+sudo chown -R $USER /tdata
 ./benchmarks.sh
+./kernels.sh
+sudo update-initramfs -u -k all
+./update_grub.sh
+
 ./settings.sh
+crontab ./crontab.txt
 
 ./dotfiles.sh
-./nonroot_packages.sh
-
-crontab ./crontab.txt
+./nonroot_packages.sh   # asks for user input
