@@ -81,6 +81,11 @@ create_huge_pages_cxl() {
     echo 1 | sudo tee /sys/devices/system/node/node2/hugepages/hugepages-1048576kB/nr_hugepages >/dev/null 2>&1
 }
 
+run_pmqos() {
+    nohup sudo /proj/nestfarm-PG0/proj/run/pmqos &
+    disown
+}
+
 check_cxl_conf() {
     set_performance_mode
     set_cpu_freq
@@ -96,6 +101,7 @@ check_cxl_conf() {
     configure_cxl_exp_cores
     create_huge_pages_local_numa
     create_huge_pages_cxl
+    run_pmqos
     flush_fs_caches
 }
 
@@ -111,6 +117,8 @@ check_conf() {
     disable_ht
     disable_turbo
     disable_swap
+    configure_cxl_exp_cores
     create_huge_pages_local_numa
+    run_pmqos
     flush_fs_caches
 }
