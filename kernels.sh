@@ -12,10 +12,12 @@ LATEST_TAG=$(git ls-remote --tags --sort='v:refname' $REPO_URL |
 git clone --depth 1 --branch $LATEST_TAG $REPO_URL
 cd linux
 git apply $HOME/cloudlab/patches/perf.patch
+
 cp /boot/config-$(uname -r) .config
 sed -i 's/^CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/' .config
 sed -i 's/^CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/' .config
 make olddefconfig
+
 make -j$(nproc)
 make modules
 sudo make install
@@ -27,6 +29,23 @@ make -j$(nproc)
 cd /tdata
 
 # memtis kernel (TODO)
+git clone git@github.com:cosmoss-jigu/memtis.git
+cd memtis/linux
 
+make defconfig
+CONFIG_OPTIONS=(
+    "CONFIG_HTMM=y"
+    "CONFIG_PERF_EVENTS_INTEL_UNCORE=y"
+    "CONFIG_INTEL_UNCORE_FREQ_CONTROL=y"
+)
+for CONFIG in "${CONFIG_OPTIONS[@]}"; do
+    SYMBOL=$(echo "$CONFIG" | cut -d'=' -f1)
+    sed -i "/^$SYMBOL/d" .config
+    echo "$CONFIG" >> .config
+done
+make olddefconfig
 
-
+make -j$(nproc)
+make modules
+sudo make install
+sudo make modules_install
