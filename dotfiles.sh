@@ -1,3 +1,7 @@
+#!/bin/bash
+
+cd $HOME/cloudlab
+
 # stow
 if ! command -v stow &>/dev/null; then
     echo "Installing stow..."
@@ -16,12 +20,12 @@ fi
 # dotfiles
 if [ ! -d "$HOME/dotfiles" ]; then
     echo "Setting up dotfiles..."
-    git clone git@github.com:berkayinceisci/dotfiles.git ~/dotfiles
-    cd ~/dotfiles
+    git clone git@github.com:berkayinceisci/dotfiles.git $HOME/dotfiles
+    cd $HOME/dotfiles
     if ! stow *; then
         echo "stow failed, removing dotfiles directory..."
         cd - >/dev/null
-        rm -rf ~/dotfiles
+        rm -rf $HOME/dotfiles
         exit 1
     fi
     cd - >/dev/null
