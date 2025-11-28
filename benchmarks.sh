@@ -1,13 +1,11 @@
 #!/bin/bash
 
-# ==> Benchmarks
-
 cd /tdata
 
 # pcm
 git clone --recurse-submodules git@github.com:MoatLab/pcm.git
 cd pcm
-git apply ~/cloudlab/patches/pcm-latency.patch
+git apply $HOME/cloudlab/patches/pcm-latency.patch
 mkdir build
 cd build
 cmake -DCMAKE_MESSAGE_LOG_LEVEL=WARNING .. > /dev/null
@@ -35,7 +33,7 @@ git clone --depth 1 git@github.com:MoatLab/Pond.git
 mv Pond/gapbs gapbs-cmds
 rm -rf Pond
 
-cd ~/cloudlab
+cd $HOME/cloudlab
 
 echo "Benchmarks are installed"
 

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd /tdata
 
 # latest linux kernel, perf

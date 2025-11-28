@@ -1,12 +1,14 @@
 #!/bin/bash
 
+cd $HOME/cloudlab
+
 export PATH="$HOME/.local/bin:$PATH"
 export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
 export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-if ! grep -q "PKG_CONFIG_PATH" ~/.profile; then
-    echo 'export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"' >> ~/.profile
-    echo 'export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ~/.profile
+if ! grep -q "PKG_CONFIG_PATH" $HOME/.profile; then
+    echo 'export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"' >> $HOME/.profile
+    echo 'export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"' >> $HOME/.profile
 fi
 
 # ==> Packages
@@ -37,13 +39,13 @@ if ! command -v zsh &> /dev/null; then
     make install
     cd -
     rm -rf zsh-5.9
-    echo '[ -f $HOME/.local/bin/zsh ] && exec $HOME/.local/bin/zsh -l' >> ~/.profile
+    echo '[ -f $HOME/.local/bin/zsh ] && exec $HOME/.local/bin/zsh -l' >> $HOME/.profile
 else
     echo "zsh already installed, skipping..."
 fi
 
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions &>/dev/null
-git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting &>/dev/null
+git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosuggestions &>/dev/null
+git clone https://github.com/zsh-users/zsh-syntax-highlighting $HOME/.zsh/zsh-syntax-highlighting &>/dev/null
 
 # rust
 if ! command -v rustc &> /dev/null || ! command -v cargo &> /dev/null; then
@@ -61,9 +63,9 @@ cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
 # go
 if ! command -v go &> /dev/null; then
     echo "Installing go..."
-    rm -rf ~/.local/go
+    rm -rf $HOME/.local/go
     wget https://golang.org/dl/go1.25.1.linux-amd64.tar.gz
-    tar -C ~/.local -xzf go1.25.1.linux-amd64.tar.gz
+    tar -C $HOME/.local -xzf go1.25.1.linux-amd64.tar.gz
     export PATH="$HOME/.local/go/bin:$PATH"
     export GOROOT="$HOME/.local/go"
     export GOPATH="$HOME/go"
@@ -102,7 +104,7 @@ else
     echo "tmux already installed, skipping..."
 fi
 
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &>/dev/null
+git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm &>/dev/null
 
 # neovim
 if ! command -v nvim &> /dev/null; then
