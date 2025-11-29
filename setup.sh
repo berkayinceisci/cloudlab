@@ -14,7 +14,6 @@ export PATH="$HOME/.local/bin:$PATH"
 sudo chown -R $USER /tdata
 ./benchmarks.sh
 ./kernels.sh
-sudo update-initramfs -u -k all
 ./update_grub.sh
 
 ./settings.sh
