@@ -16,6 +16,10 @@ git apply $HOME/cloudlab/patches/perf.patch
 cp /boot/config-$(uname -r) .config
 sed -i 's/^CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/' .config
 sed -i 's/^CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/' .config
+sed -i 's/^CONFIG_NVME_CORE=m/CONFIG_NVME_CORE=y/' .config
+sed -i 's/^CONFIG_BLK_DEV_NVME=m/CONFIG_BLK_DEV_NVME=y/' .config
+sed -i 's/^CONFIG_SATA_AHCI=m/CONFIG_SATA_AHCI=y/' .config
+sed -i 's/^CONFIG_SATA_AHCI_PLATFORM=m/CONFIG_SATA_AHCI_PLATFORM=y/' .config
 make olddefconfig
 
 make -j$(nproc)
