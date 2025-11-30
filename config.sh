@@ -12,6 +12,10 @@ get_sysinfo() {
     cat /proc/meminfo
 }
 
+modify_uncore_freq() {
+    sudo $HOME/cloudlab/modify_uncore_freq.sh 2000000 2000000 500000 500000 >/dev/null 2>&1
+}
+
 disable_thp() {
     echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled >/dev/null 2>&1
 }
@@ -98,6 +102,7 @@ check_cxl_conf() {
     disable_ht
     disable_turbo
     disable_swap
+    modify_uncore_freq
     configure_cxl_exp_cores
     create_huge_pages_local_numa
     create_huge_pages_cxl
@@ -117,6 +122,7 @@ check_conf() {
     disable_ht
     disable_turbo
     disable_swap
+    modify_uncore_freq
     configure_cxl_exp_cores
     create_huge_pages_local_numa
     run_pmqos
