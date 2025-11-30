@@ -7,6 +7,7 @@ sudo add-apt-repository -y ppa:git-core/ppa
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     build-essential \
+    zsh \
     vim \
     htop \
     jq \
