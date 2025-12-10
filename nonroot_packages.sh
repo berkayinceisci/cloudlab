@@ -77,6 +77,17 @@ fi
 go install github.com/junegunn/fzf@latest
 go install github.com/jesseduffield/lazygit@latest
 
+# python3.11
+wget https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tgz
+tar xzf Python-3.11.6.tgz
+cd Python-3.11.6
+./configure --prefix=$HOME/.local --enable-optimizations
+make -j$(nproc)
+make altinstall
+
+$HOME/.local/bin/python3.11 -m pip install --upgrade pip
+$HOME/.local/bin/python3.11 -m pip install "vectordb-bench[qdrant]"
+
 # npm/nvm
 if ! command -v nvm &> /dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
     echo "Installing nvm and node..."
