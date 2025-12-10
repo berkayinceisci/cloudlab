@@ -32,6 +32,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     xdg-utils \
     flex bison libslang2-dev libiberty-dev libzstd-dev libcap-dev libbabeltrace-ctf-dev libunwind-dev systemtap-sdt-dev liblz4-tool \
     libjemalloc-dev libdb++-dev libaio-dev \
+    libsqlite3-dev \
     libgfortran5 \
     python3-dev libtraceevent-dev libdebuginfod-dev libperl-dev llvm-dev libcapstone-dev libpfm4-dev \
     clang \
