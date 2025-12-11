@@ -10,6 +10,8 @@ export PATH="$HOME/.local/bin:$PATH"
 
 ./ssh_keys.sh   # asks for user input
 ./root_packages.sh
+./dotfiles.sh
+./nonroot_packages.sh
 
 sudo chown -R $USER /tdata
 ./benchmarks.sh
@@ -18,6 +20,3 @@ sudo chown -R $USER /tdata
 
 ./settings.sh
 crontab ./crontab.txt
-
-./dotfiles.sh
-./nonroot_packages.sh   # asks for user input

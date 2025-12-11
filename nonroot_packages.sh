@@ -93,9 +93,6 @@ else
     echo "Python 3.11 already installed, skipping installation..."
 fi
 
-$HOME/.local/bin/python3.11 -m pip install --upgrade pip
-$HOME/.local/bin/python3.11 -m pip install "vectordb-bench[qdrant]"
-
 # npm/nvm
 if ! command -v nvm &> /dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
     echo "Installing nvm and node..."
@@ -143,7 +140,6 @@ fi
 if ! command -v atuin &> /dev/null; then
     echo "Installing atuin..."
     bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
-    atuin login && atuin sync
 else
     echo "atuin already installed, skipping..."
 fi
