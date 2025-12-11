@@ -20,6 +20,14 @@ MODE=perf MASSTREE=1 make -j dbtest
 
 cd /tdata
 
+# qdrant qdrant-client vectordb-bench
+wget https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant_1.15.5-1_amd64.deb
+sudo dpkg -i qdrant_1.15.1-1_amd64.deb
+
+$HOME/.local/bin/python3.11 -m pip install --upgrade pip
+$HOME/.local/bin/python3.11 -m pip install "vectordb-bench[qdrant]==1.0.15"
+$HOME/.local/bin/python3.11 -m pip install "qdrant-client==1.15.1"
+
 # gapbs
 git clone https://github.com/sbeamer/gapbs.git
 cd gapbs
