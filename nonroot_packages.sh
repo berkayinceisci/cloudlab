@@ -78,12 +78,20 @@ go install github.com/junegunn/fzf@latest
 go install github.com/jesseduffield/lazygit@latest
 
 # python3.11
-wget https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tgz
-tar xzf Python-3.11.6.tgz
-cd Python-3.11.6
-./configure --prefix=$HOME/.local --enable-optimizations
-make -j$(nproc)
-make altinstall
+if ! command -v python3.11 &> /dev/null; then
+    echo "Installing Python 3.11..."
+    wget https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tgz
+    tar xzf Python-3.11.6.tgz
+    (
+        cd Python-3.11.6
+        ./configure --prefix="$HOME/.local" --enable-optimizations
+        make -j"$(nproc)"
+        make altinstall
+    )
+    rm -rf Python-3.11.6
+else
+    echo "Python 3.11 already installed, skipping installation..."
+fi
 
 $HOME/.local/bin/python3.11 -m pip install --upgrade pip
 $HOME/.local/bin/python3.11 -m pip install "vectordb-bench[qdrant]"
@@ -140,6 +148,6 @@ else
     echo "atuin already installed, skipping..."
 fi
 
-rm -f *.tar.gz *.tar.xz
+rm -f *.tar.gz *.tar.xz *.tgz
 
 echo "Local packages are installed"
