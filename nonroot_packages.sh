@@ -101,6 +101,7 @@ if ! command -v nvm &> /dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
     nvm install 22
 
     npm install -g @anthropic-ai/claude-code
+    npm install -g @openai/codex
 else
     echo "nvm already installed, skipping..."
 fi
