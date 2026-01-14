@@ -52,8 +52,6 @@ if ! command -v rustc &> /dev/null || ! command -v cargo &> /dev/null; then
     echo "Installing rust..."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     . "$HOME/.cargo/env"
-
-    cargo install --locked tlrc
 else
     echo "rust already installed, skipping installation..."
 fi
