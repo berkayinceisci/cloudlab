@@ -58,7 +58,7 @@ else
     echo "rust already installed, skipping installation..."
 fi
 
-cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
+cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta uv
 
 # go
 if ! command -v go &> /dev/null; then
