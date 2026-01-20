@@ -9,7 +9,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     build-essential \
     zsh \
     vim \
-    htop \
+    htop cpuid \
     jq \
     numactl libnuma-dev \
     hwloc \
