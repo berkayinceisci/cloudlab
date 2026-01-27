@@ -99,7 +99,7 @@ if ! command -v nvm &> /dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
     . "$HOME/.nvm/nvm.sh"
     nvm install 22
 
-    npm install -g @anthropic-ai/claude-code
+    curl -fsSL https://claude.ai/install.sh | bash
     npm install -g @openai/codex
 else
     echo "nvm already installed, skipping..."
