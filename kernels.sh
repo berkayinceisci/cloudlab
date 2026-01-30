@@ -35,9 +35,12 @@ cd /tdata
 # memtis kernel (TODO)
 git clone git@github.com:cosmoss-jigu/memtis.git
 cd memtis/linux
+git apply $HOME/cloudlab/patches/memtis-vmstat.patch
 
 make defconfig
 CONFIG_OPTIONS=(
+    "CONFIG_MEMCG=y"
+    "CONFIG_TRANSPARENT_HUGEPAGE=y"
     "CONFIG_HTMM=y"
     "CONFIG_PERF_EVENTS_INTEL_UNCORE=y"
     "CONFIG_INTEL_UNCORE_FREQ_CONTROL=y"
