@@ -18,4 +18,4 @@ sudo chown -R $USER /tdata
 ./update_grub.sh
 
 ./settings.sh
-crontab ./crontab.txt
+./crontab.sh
