@@ -1,6 +1,8 @@
 #!/bin/bash
 
-sudo apt install -y age
+if ! command -v age &>/dev/null; then
+    sudo apt update && sudo apt install -y age
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 KEY_DIR="$SCRIPT_DIR/keys"
