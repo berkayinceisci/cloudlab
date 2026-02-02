@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 ENTRIES=(
     "@reboot sh $HOME/cloudlab/settings.sh"
