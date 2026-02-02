@@ -1,7 +1,11 @@
 #!/bin/bash
 
 if ! command -v age &>/dev/null; then
-    sudo apt update && sudo apt install -y age
+    AGE_VERSION="v1.2.1"
+    wget -qO /tmp/age.tar.gz "https://dl.filippo.io/age/${AGE_VERSION}?for=linux/amd64"
+    tar -xzf /tmp/age.tar.gz -C /tmp
+    sudo cp /tmp/age/age /tmp/age/age-keygen /usr/local/bin/
+    rm -rf /tmp/age /tmp/age.tar.gz
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
