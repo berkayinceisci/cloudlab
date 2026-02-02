@@ -100,7 +100,6 @@ if ! command -v nvm &> /dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
     nvm install 22
 
     curl -fsSL https://claude.ai/install.sh | bash
-    npm install -g @openai/codex
     npm install -g pyright
     npx playwright install
 else
