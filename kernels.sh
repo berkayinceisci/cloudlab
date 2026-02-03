@@ -34,8 +34,9 @@ cd /tdata
 
 # memtis kernel (TODO)
 git clone git@github.com:cosmoss-jigu/memtis.git
-cd memtis/linux
-git apply $HOME/cloudlab/patches/memtis-vmstat.patch
+cd memtis
+git apply --directory=linux $HOME/cloudlab/patches/memtis-vmstat.patch
+cd linux
 
 make defconfig
 CONFIG_OPTIONS=(
