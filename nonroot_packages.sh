@@ -101,6 +101,10 @@ if ! command -v nvm &> /dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
 
     curl -fsSL https://claude.ai/install.sh | bash
     npm install -g pyright
+
+    claude plugin install feature-dev@claude-plugins-official
+    claude plugin install code-review@claude-plugins-official
+    claude plugin install playwright@claude-plugins-official
 else
     echo "nvm already installed, skipping..."
 fi
