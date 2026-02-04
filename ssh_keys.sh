@@ -29,3 +29,4 @@ chmod 600 "$HOME/.ssh/id_ed25519"
 chmod 644 "$HOME/.ssh/id_ed25519.pub"
 
 ssh-keyscan github.com >> "$HOME/.ssh/known_hosts"
+ssh-keyscan popos >> "$HOME/.ssh/known_hosts"  # popos for ccusage-push
