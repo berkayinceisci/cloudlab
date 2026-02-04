@@ -10,7 +10,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     zsh \
     vim \
     htop cpuid \
-    jq progress\
+    jq progress \
     numactl libnuma-dev \
     hwloc \
     msr-tools \
