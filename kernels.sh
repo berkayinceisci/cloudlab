@@ -55,5 +55,5 @@ make olddefconfig
 
 make -j$(nproc)
 make modules
-sudo make install
 sudo make modules_install
+sudo make install
