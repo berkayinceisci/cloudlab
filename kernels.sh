@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /tdata
+cd $HOME
 
 # latest linux kernel, perf
 REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
@@ -32,7 +32,7 @@ make -j$(nproc)
 
 cd /tdata
 
-# memtis kernel (TODO)
+# memtis kernel
 git clone git@github.com:cosmoss-jigu/memtis.git
 cd memtis
 git apply --directory=linux $HOME/cloudlab/patches/memtis-vmstat.patch
