@@ -1,4 +1,5 @@
 # commands that ask for user input, run this script after installation is complete and the environment is reloaded
 ./tailscale.sh
 ./dotfiles.sh
+echo "Logging into Atuin (shell history sync)..."
 atuin login && atuin sync
