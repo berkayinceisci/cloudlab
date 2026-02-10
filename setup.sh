@@ -8,7 +8,7 @@ fi
 mkdir -p $HOME/.local
 export PATH="$HOME/.local/bin:$PATH"
 
-./ssh_keys.sh   # asks for user input
+./ssh_keys.sh   # asks for user input, sets up private/public ssh keys for cloudlab
 ./root_packages.sh
 ./nonroot_packages.sh
 
