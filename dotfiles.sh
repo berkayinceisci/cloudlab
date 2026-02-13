@@ -29,8 +29,6 @@ if [ ! -d "$HOME/dotfiles" ]; then
         exit 1
     fi
     cd - >/dev/null
-    # Add popos host key now that ~/.ssh/config defines it
-    ssh-keyscan popos >> "$HOME/.ssh/known_hosts" 2>/dev/null
 else
     echo "dotfiles already exist, skipping..."
 fi

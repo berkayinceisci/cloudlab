@@ -57,3 +57,6 @@ sudo tailscale up --authkey="$TS_AUTHKEY"
 
 echo "Tailscale is connected"
 tailscale status
+
+# Add popos host key to known_hosts (relies on MagicDNS)
+ssh-keyscan popos >> "$HOME/.ssh/known_hosts" 2>/dev/null
