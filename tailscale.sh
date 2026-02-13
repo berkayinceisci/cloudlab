@@ -9,14 +9,24 @@ if ! command -v tailscale &>/dev/null; then
 fi
 
 # Decrypt OAuth client credentials (don't expire, unlike auth keys)
-if [[ ! -f "$KEY_DIR/tailscale_oauth.age" ]]; then
-    echo "Error: tailscale_oauth.age not found in $KEY_DIR"
-    echo "Expected format: CLIENT_ID:CLIENT_SECRET"
-    exit 1
-fi
+TS_CACHE="$KEY_DIR/tailscale_oauth.cached"
 
-echo "Decrypting Tailscale OAuth credentials (enter passphrase)..."
-TS_OAUTH=$(age -d "$KEY_DIR/tailscale_oauth.age")
+if [[ -f "$TS_CACHE" ]]; then
+    TS_OAUTH=$(<"$TS_CACHE")
+else
+    if [[ ! -f "$KEY_DIR/tailscale_oauth.age" ]]; then
+        echo "Error: tailscale_oauth.age not found in $KEY_DIR"
+        echo "Expected format: CLIENT_ID:CLIENT_SECRET"
+        exit 1
+    fi
+
+    echo "Decrypting Tailscale OAuth credentials (enter passphrase)..."
+    TS_OAUTH=$(age -d "$KEY_DIR/tailscale_oauth.age")
+
+    # Cache for non-interactive reboot use
+    echo "$TS_OAUTH" > "$TS_CACHE"
+    chmod 600 "$TS_CACHE"
+fi
 TS_CLIENT_ID="${TS_OAUTH%%:*}"
 TS_CLIENT_SECRET="${TS_OAUTH##*:}"
 

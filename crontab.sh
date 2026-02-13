@@ -2,6 +2,7 @@
 
 ENTRIES=(
     "@reboot sh $HOME/cloudlab/settings.sh"
+    "@reboot bash $HOME/cloudlab/tailscale.sh"
 )
 
 for entry in "${ENTRIES[@]}"; do
