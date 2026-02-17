@@ -20,8 +20,13 @@ fi
 mkdir -p "$HOME/.ssh"
 
 # Decrypt private key (asks for age passphrase)
-echo "Decrypting SSH private key (enter passphrase)..."
-age -d -o "$HOME/.ssh/id_ed25519" "$KEY_DIR/id_ed25519.age"
+while true; do
+    echo "Decrypting SSH private key (enter passphrase)..."
+    if age -d -o "$HOME/.ssh/id_ed25519" "$KEY_DIR/id_ed25519.age"; then
+        break
+    fi
+    echo "Decryption failed. Please try again."
+done
 
 cp "$KEY_DIR/id_ed25519.pub" "$HOME/.ssh/id_ed25519.pub"
 chmod 700 "$HOME/.ssh"

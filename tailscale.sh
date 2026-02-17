@@ -20,8 +20,13 @@ else
         exit 1
     fi
 
-    echo "Decrypting Tailscale OAuth credentials (enter passphrase)..."
-    TS_OAUTH=$(age -d "$KEY_DIR/tailscale_oauth.age")
+    while true; do
+        echo "Decrypting Tailscale OAuth credentials (enter passphrase)..."
+        if TS_OAUTH=$(age -d "$KEY_DIR/tailscale_oauth.age"); then
+            break
+        fi
+        echo "Decryption failed. Please try again."
+    done
 
     # Cache for non-interactive reboot use
     echo "$TS_OAUTH" > "$TS_CACHE"
