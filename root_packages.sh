@@ -15,6 +15,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     hwloc \
     msr-tools \
     cpufrequtils \
+    grc \
     tree \
     stow \
     gnuplot \
