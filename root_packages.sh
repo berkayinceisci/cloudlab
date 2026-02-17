@@ -35,7 +35,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     libsqlite3-dev \
     libgfortran5 \
     python3-dev libtraceevent-dev libdebuginfod-dev libperl-dev llvm-dev libcapstone-dev libpfm4-dev \
-    clang \
+    clang clang-format \
     libssl-dev \
     linux-tools-common linux-tools-generic linux-tools-$(uname -r)
 

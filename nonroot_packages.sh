@@ -56,8 +56,9 @@ else
     echo "rust already installed, skipping installation..."
 fi
 
-cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta
+cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta stylua
 cargo install --locked tlrc uv
+uv tool install ruff
 
 # go
 if ! command -v go &> /dev/null; then
@@ -75,6 +76,7 @@ fi
 
 go install github.com/junegunn/fzf@latest
 go install github.com/jesseduffield/lazygit@latest
+go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
 # python3.11
 if ! command -v python3.11 &> /dev/null; then
@@ -100,7 +102,7 @@ if ! command -v nvm &> /dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
     nvm install 22
 
     curl -fsSL https://claude.ai/install.sh | bash
-    npm install -g pyright
+    npm install -g pyright prettier
 
     claude plugin marketplace add anthropics/claude-plugins-official
     claude plugin install feature-dev@claude-plugins-official
