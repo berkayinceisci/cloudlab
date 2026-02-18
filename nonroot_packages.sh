@@ -117,7 +117,7 @@ else
 fi
 
 # tmux
-if ! command -v tmux &> /dev/null; then
+if ! command -v tmux &> /dev/null || [[ "$(tmux -V)" < "tmux 3.3" ]]; then
     echo "Installing tmux..."
     git clone https://github.com/tmux/tmux.git
     cd tmux
