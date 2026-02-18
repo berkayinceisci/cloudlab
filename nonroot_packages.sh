@@ -57,8 +57,12 @@ else
 fi
 
 cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta stylua
+cargo install --force yazi-build
 cargo install --locked tlrc uv
 uv tool install ruff
+
+# yazi plugins
+ya pkg add yazi-rs/plugins:toggle-pane
 
 # go
 if ! command -v go &> /dev/null; then

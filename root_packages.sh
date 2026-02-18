@@ -38,6 +38,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     python3-dev libtraceevent-dev libdebuginfod-dev libperl-dev llvm-dev libcapstone-dev libpfm4-dev \
     clang clang-format \
     libssl-dev \
+    poppler-utils \
     linux-tools-common linux-tools-generic linux-tools-$(uname -r)
 
 sudo apt install --reinstall linux-firmware
