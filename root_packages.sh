@@ -16,6 +16,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
     msr-tools \
     cpufrequtils \
     grc \
+    chafa \
     tree \
     stow \
     gnuplot \
