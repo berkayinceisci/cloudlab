@@ -13,6 +13,7 @@ export PATH="$HOME/.local/bin:$PATH"
 ./nonroot_packages.sh
 
 sudo chown -R $USER /tdata
+./benchmarks.sh
 ./kernels.sh
 ./update_grub.sh
 
