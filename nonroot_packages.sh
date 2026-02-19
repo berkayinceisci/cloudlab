@@ -60,9 +60,11 @@ cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta sty
 cargo install --force yazi-build
 cargo install --locked tlrc uv
 uv tool install ruff
+uv tool install trash-cli
 
 # yazi plugins
 ya pkg add yazi-rs/plugins:toggle-pane
+ya pkg add boydaihungst/restore
 
 # go
 if ! command -v go &> /dev/null; then
