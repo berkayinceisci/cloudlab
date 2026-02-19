@@ -30,7 +30,7 @@ sudo make install
 cd tools/perf
 make -j$(nproc)
 
-cd /tdata
+cd /mnt/sda4
 
 # memtis kernel
 git clone git@github.com:cosmoss-jigu/memtis.git

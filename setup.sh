@@ -9,11 +9,13 @@ mkdir -p $HOME/.local
 export PATH="$HOME/.local/bin:$PATH"
 
 ./ssh_keys.sh   # asks for user input, sets up private/public ssh keys for cloudlab
+./setup_disks.sh
+
 ./root_packages.sh
 ./nonroot_packages.sh
 
-sudo chown -R $USER /tdata
 ./benchmarks.sh
+
 ./kernels.sh
 ./update_grub.sh
 
