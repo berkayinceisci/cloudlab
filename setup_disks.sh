@@ -37,7 +37,7 @@ done
 # --- Format if needed (preserves data after OS reset) ---
 
 for dev in "$SDA4" "$SDB"; do
-    if ! blkid -s TYPE -o value "$dev" 2>/dev/null | grep -q ext4; then
+    if ! sudo blkid -s TYPE -o value "$dev" 2>/dev/null | grep -q ext4; then
         echo "Formatting $dev as ext4..."
         sudo mkfs.ext4 -F "$dev"
     else
@@ -61,8 +61,8 @@ fi
 
 # --- Set ownership ---
 
-sudo chown "$USER:$USER" "$MNT_SSD"
-sudo chown "$USER:$USER" "$MNT_HDD"
+sudo chown "$(id -u):$(id -g)" "$MNT_SSD"
+sudo chown "$(id -u):$(id -g)" "$MNT_HDD"
 
 # --- Update fstab ---
 
@@ -73,8 +73,8 @@ if grep -q '/tdata' /etc/fstab; then
 fi
 
 # Add UUID-based entries for both mounts
-SDA4_UUID=$(blkid -s UUID -o value "$SDA4")
-SDB_UUID=$(blkid -s UUID -o value "$SDB")
+SDA4_UUID=$(sudo blkid -s UUID -o value "$SDA4")
+SDB_UUID=$(sudo blkid -s UUID -o value "$SDB")
 
 if ! grep -q "$MNT_SSD" /etc/fstab; then
     echo "UUID=$SDA4_UUID $MNT_SSD ext4 defaults 0 2" | sudo tee -a /etc/fstab
