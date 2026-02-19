@@ -1,4 +1,4 @@
 #!/bin/bash
 
-git clone git@github.com:MoatLab/colo-scripts /mnt/sda4/colo-scripts
-/mnt/sda4/colo-scripts/install.sh
+git clone git@github.com:MoatLab/colo-scripts $DATA_DIR/colo-scripts
+$DATA_DIR/colo-scripts/install.sh
