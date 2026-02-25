@@ -5,10 +5,10 @@ cd $HOME
 # latest linux kernel, perf
 REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
 LATEST_TAG=$(git ls-remote --tags --sort='v:refname' $REPO_URL |
-    grep -v 'rc' |
-    grep -v '{}' |
-    tail -n1 |
-    cut -d'/' -f3)
+	grep -v 'rc' |
+	grep -v '{}' |
+	tail -n1 |
+	cut -d'/' -f3)
 git clone --depth 1 --branch $LATEST_TAG $REPO_URL
 cd linux
 git apply $HOME/cloudlab/patches/perf.patch
@@ -40,16 +40,16 @@ cd linux
 
 make defconfig
 CONFIG_OPTIONS=(
-    "CONFIG_MEMCG=y"
-    "CONFIG_TRANSPARENT_HUGEPAGE=y"
-    "CONFIG_HTMM=y"
-    "CONFIG_PERF_EVENTS_INTEL_UNCORE=y"
-    "CONFIG_INTEL_UNCORE_FREQ_CONTROL=y"
+	"CONFIG_MEMCG=y"
+	"CONFIG_TRANSPARENT_HUGEPAGE=y"
+	"CONFIG_HTMM=y"
+	"CONFIG_PERF_EVENTS_INTEL_UNCORE=y"
+	"CONFIG_INTEL_UNCORE_FREQ_CONTROL=y"
 )
 for CONFIG in "${CONFIG_OPTIONS[@]}"; do
-    SYMBOL=$(echo "$CONFIG" | cut -d'=' -f1)
-    sed -i "/^$SYMBOL/d" .config
-    echo "$CONFIG" >> .config
+	SYMBOL=$(echo "$CONFIG" | cut -d'=' -f1)
+	sed -i "/^$SYMBOL/d" .config
+	echo "$CONFIG" >>.config
 done
 make olddefconfig
 

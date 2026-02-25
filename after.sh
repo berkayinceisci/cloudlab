@@ -3,14 +3,14 @@
 ./tailscale.sh
 # Add popos host key to known_hosts (wait for MagicDNS)
 for i in $(seq 1 10); do
-    keys=$(ssh-keyscan popos 2>/dev/null)
-    if [[ -n "$keys" ]]; then
-        echo "$keys" >> "$HOME/.ssh/known_hosts"
-        echo "Added popos host key to known_hosts"
-        break
-    fi
-    echo "Waiting for MagicDNS to resolve popos... (attempt $i/10)"
-    sleep 2
+	keys=$(ssh-keyscan popos 2>/dev/null)
+	if [[ -n "$keys" ]]; then
+		echo "$keys" >>"$HOME/.ssh/known_hosts"
+		echo "Added popos host key to known_hosts"
+		break
+	fi
+	echo "Waiting for MagicDNS to resolve popos... (attempt $i/10)"
+	sleep 2
 done
 
 ./dotfiles.sh
