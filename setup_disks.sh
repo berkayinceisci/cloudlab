@@ -3,11 +3,17 @@ set -euo pipefail
 
 # Idempotent disk setup: tear down LVM, mount /dev/sda4 and /dev/sdb as ext4.
 # Safe to run on first setup or after OS reset (won't reformat existing ext4).
+# Skips /dev/sdb if it doesn't exist.
 
 SDA4="/dev/sda4"
 SDB="/dev/sdb"
-MNT_SSD="/mnt/sda4"
+MNT_SDA4="/mnt/sda4"
 MNT_HDD="/mnt/hdd"
+
+HAS_SDB=false
+if [[ -b "$SDB" ]]; then
+    HAS_SDB=true
+fi
 
 # --- Tear down LVM if present ---
 
@@ -27,7 +33,12 @@ if sudo vgs emulab &>/dev/null; then
     sudo vgremove -f emulab
 fi
 
-for dev in "$SDA4" "$SDB"; do
+DEVS=("$SDA4")
+if [[ "$HAS_SDB" == "true" ]]; then
+    DEVS+=("$SDB")
+fi
+
+for dev in "${DEVS[@]}"; do
     if sudo pvs "$dev" &>/dev/null; then
         echo "Removing PV $dev..."
         sudo pvremove -f "$dev"
@@ -36,7 +47,7 @@ done
 
 # --- Format if needed (preserves data after OS reset) ---
 
-for dev in "$SDA4" "$SDB"; do
+for dev in "${DEVS[@]}"; do
     if ! sudo blkid -s TYPE -o value "$dev" 2>/dev/null | grep -q ext4; then
         echo "Formatting $dev as ext4..."
         sudo mkfs.ext4 -F "$dev"
@@ -47,22 +58,29 @@ done
 
 # --- Mount ---
 
-sudo mkdir -p "$MNT_SSD" "$MNT_HDD"
-
-if ! mountpoint -q "$MNT_SSD" 2>/dev/null; then
-    echo "Mounting $SDA4 -> $MNT_SSD"
-    sudo mount "$SDA4" "$MNT_SSD"
+sudo mkdir -p "$MNT_SDA4"
+if [[ "$HAS_SDB" == "true" ]]; then
+    sudo mkdir -p "$MNT_HDD"
 fi
 
-if ! mountpoint -q "$MNT_HDD" 2>/dev/null; then
-    echo "Mounting $SDB -> $MNT_HDD"
-    sudo mount "$SDB" "$MNT_HDD"
+if ! mountpoint -q "$MNT_SDA4" 2>/dev/null; then
+    echo "Mounting $SDA4 -> $MNT_SDA4"
+    sudo mount "$SDA4" "$MNT_SDA4"
+fi
+
+if [[ "$HAS_SDB" == "true" ]]; then
+    if ! mountpoint -q "$MNT_HDD" 2>/dev/null; then
+        echo "Mounting $SDB -> $MNT_HDD"
+        sudo mount "$SDB" "$MNT_HDD"
+    fi
 fi
 
 # --- Set ownership ---
 
-sudo chown "$(id -u):$(id -g)" "$MNT_SSD"
-sudo chown "$(id -u):$(id -g)" "$MNT_HDD"
+sudo chown "$(id -u):$(id -g)" "$MNT_SDA4"
+if [[ "$HAS_SDB" == "true" ]]; then
+    sudo chown "$(id -u):$(id -g)" "$MNT_HDD"
+fi
 
 # --- Update fstab ---
 
@@ -74,14 +92,16 @@ fi
 
 # Add UUID-based entries for both mounts
 SDA4_UUID=$(sudo blkid -s UUID -o value "$SDA4")
-SDB_UUID=$(sudo blkid -s UUID -o value "$SDB")
 
-if ! grep -q "$MNT_SSD" /etc/fstab; then
-    echo "UUID=$SDA4_UUID $MNT_SSD ext4 defaults 0 2" | sudo tee -a /etc/fstab
+if ! grep -q "$MNT_SDA4" /etc/fstab; then
+    echo "UUID=$SDA4_UUID $MNT_SDA4 ext4 defaults 0 2" | sudo tee -a /etc/fstab
 fi
 
-if ! grep -q "$MNT_HDD" /etc/fstab; then
-    echo "UUID=$SDB_UUID $MNT_HDD ext4 defaults 0 2" | sudo tee -a /etc/fstab
+if [[ "$HAS_SDB" == "true" ]]; then
+    SDB_UUID=$(sudo blkid -s UUID -o value "$SDB")
+    if ! grep -q "$MNT_HDD" /etc/fstab; then
+        echo "UUID=$SDB_UUID $MNT_HDD ext4 defaults 0 2" | sudo tee -a /etc/fstab
+    fi
 fi
 
 # --- Remove stale /tdata mount point ---
@@ -92,4 +112,7 @@ if [[ -d /tdata ]] && ! mountpoint -q /tdata 2>/dev/null; then
 fi
 
 echo "Done. Mounts:"
-df -h "$MNT_SSD" "$MNT_HDD"
+df -h "$MNT_SDA4"
+if [[ "$HAS_SDB" == "true" ]]; then
+    df -h "$MNT_HDD"
+fi
