@@ -70,8 +70,9 @@ ya pkg add boydaihungst/restore
 if ! command -v go &>/dev/null; then
 	echo "Installing go..."
 	rm -rf $HOME/.local/go
-	wget https://golang.org/dl/go1.25.1.linux-amd64.tar.gz
-	tar -C $HOME/.local -xzf go1.25.1.linux-amd64.tar.gz
+	GO_VERSION=$(curl -fsSL 'https://go.dev/VERSION?m=text' | head -1)
+	wget "https://golang.org/dl/${GO_VERSION}.linux-amd64.tar.gz"
+	tar -C $HOME/.local -xzf "${GO_VERSION}.linux-amd64.tar.gz"
 	export PATH="$HOME/.local/go/bin:$PATH"
 	export GOROOT="$HOME/.local/go"
 	export GOPATH="$HOME/go"
