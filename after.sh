@@ -16,4 +16,7 @@ done
 ./dotfiles.sh
 
 echo "Logging into Atuin (shell history sync)..."
-atuin login && atuin sync
+until atuin login; do
+	echo "Login failed, retrying..."
+done
+atuin sync
