@@ -29,6 +29,7 @@ sudo make install
 
 cd tools/perf
 make -j$(nproc)
+sudo ln -sf $HOME/linux/tools/perf/perf /usr/local/bin/perf
 
 cd $DATA_DIR
 
