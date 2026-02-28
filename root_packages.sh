@@ -28,7 +28,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
 	acpica-tools \
 	pkg-config \
 	sysstat \
-	i7z \
+	i7z pigz \
 	cmake libncurses5-dev ninja-build meson \
 	automake \
 	xdg-utils \
