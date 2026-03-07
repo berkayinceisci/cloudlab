@@ -1,5 +1,25 @@
+diff --git i/tools/perf/builtin-stat.c w/tools/perf/builtin-stat.c
+index ab40d85fb..ef6fdafa0 100644
+--- i/tools/perf/builtin-stat.c
++++ w/tools/perf/builtin-stat.c
+@@ -2696,8 +2696,14 @@ int cmd_stat(int argc, const char **argv)
+ 			return -1;
+ 		}
+ 		if (!stat_config.json_output) {
++			struct tm lt;
++			char dt[64];
++
+ 			clock_gettime(CLOCK_REALTIME, &tm);
+-			fprintf(output, "# started on %s\n", ctime(&tm.tv_sec));
++			localtime_r(&tm.tv_sec, &lt);
++			strftime(dt, sizeof(dt), "%a %b %e %H:%M:%S", &lt);
++			fprintf(output, "# started on %s.%09ld %d\n",
++				dt, tm.tv_nsec, 1900 + lt.tm_year);
+ 		}
+ 	} else if (output_fd > 0) {
+ 		mode = append_file ? "a" : "w";
 diff --git i/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json w/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
-index da46a3aeb..4bdc123a9 100644
+index da46a3aeb..f6043e909 100644
 --- i/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
 +++ w/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
 @@ -4850,6 +4850,16 @@
