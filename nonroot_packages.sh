@@ -153,7 +153,7 @@ fi
 # atuin
 if ! command -v atuin &>/dev/null; then
 	echo "Installing atuin..."
-	bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+	bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh) --non-interactive
 else
 	echo "atuin already installed, skipping..."
 fi
