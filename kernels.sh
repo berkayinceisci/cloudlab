@@ -34,6 +34,55 @@ sudo ln -sf $HOME/linux/tools/perf/perf /usr/local/bin/perf
 
 cd $DATA_DIR
 
+# linux 6.3 kernel
+REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
+git clone --depth 1 --branch v6.3 $REPO_URL linux-6_3
+cd linux-6_3
+
+cp /boot/config-$(uname -r) .config
+sed -i 's/^CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/' .config
+sed -i 's/^CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/' .config
+sed -i 's/^CONFIG_NVME_CORE=m/CONFIG_NVME_CORE=y/' .config
+sed -i 's/^CONFIG_BLK_DEV_NVME=m/CONFIG_BLK_DEV_NVME=y/' .config
+sed -i 's/^CONFIG_SATA_AHCI=m/CONFIG_SATA_AHCI=y/' .config
+sed -i 's/^CONFIG_SATA_AHCI_PLATFORM=m/CONFIG_SATA_AHCI_PLATFORM=y/' .config
+make olddefconfig
+
+make -j$(nproc)
+make modules
+sudo make modules_install
+sudo make install
+
+# set linux 6.3 as default boot kernel
+MENUENTRY=$(sudo grep -P "menuentry\s+'[^']*6\.3" /boot/grub/grub.cfg | head -1 | sed "s/.*'\([^']*\)'.*/\1/")
+sudo sed -i "s/^GRUB_DEFAULT=.*/GRUB_DEFAULT=\"Advanced options for Ubuntu>$MENUENTRY\"/" /etc/default/grub
+sudo update-grub
+
+cd $DATA_DIR
+
+# memcg kernel
+git clone -b hanry git@github.com:MoatLab/memcgLinux.git memcgLinux
+cd memcgLinux
+
+cp /boot/config-$(uname -r) .config
+sed -i 's/^CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/' .config
+sed -i 's/^CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/' .config
+sed -i 's/^CONFIG_NVME_CORE=m/CONFIG_NVME_CORE=y/' .config
+sed -i 's/^CONFIG_BLK_DEV_NVME=m/CONFIG_BLK_DEV_NVME=y/' .config
+sed -i 's/^CONFIG_SATA_AHCI=m/CONFIG_SATA_AHCI=y/' .config
+sed -i 's/^CONFIG_SATA_AHCI_PLATFORM=m/CONFIG_SATA_AHCI_PLATFORM=y/' .config
+scripts/config --disable CONFIG_LRU_GEN
+scripts/config --enable CONFIG_MMCTL
+scripts/config --enable CONFIG_INTEL_UNCORE_FREQ_CONTROL
+make olddefconfig
+
+make -j$(nproc)
+make modules
+sudo make modules_install
+sudo make install
+
+cd $DATA_DIR
+
 # memtis kernel
 git clone git@github.com:cosmoss-jigu/memtis.git
 cd memtis
