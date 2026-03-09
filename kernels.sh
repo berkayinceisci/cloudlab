@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd $HOME
+cd $DATA_DIR
 
 # latest linux kernel, perf
 REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
@@ -9,8 +9,9 @@ LATEST_TAG=$(git ls-remote --tags --sort='v:refname' $REPO_URL |
 	grep -v '{}' |
 	tail -n1 |
 	cut -d'/' -f3)
-git clone --depth 1 --branch $LATEST_TAG $REPO_URL
-cd linux
+git clone --depth 1 --branch $LATEST_TAG $REPO_URL linux-latest
+ln -sfn $DATA_DIR/linux-latest $HOME/linux
+cd linux-latest
 git apply $HOME/cloudlab/patches/perf.patch
 
 cp /boot/config-$(uname -r) .config
