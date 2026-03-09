@@ -53,11 +53,6 @@ make modules
 sudo make modules_install
 sudo make install
 
-# set linux 6.3 as default boot kernel
-MENUENTRY=$(sudo grep -P "menuentry\s+'[^']*6\.3" /boot/grub/grub.cfg | head -1 | sed "s/.*'\([^']*\)'.*/\1/")
-sudo sed -i "s/^GRUB_DEFAULT=.*/GRUB_DEFAULT=\"Advanced options for Ubuntu>$MENUENTRY\"/" /etc/default/grub
-sudo update-grub
-
 cd $DATA_DIR
 
 # memcg kernel
