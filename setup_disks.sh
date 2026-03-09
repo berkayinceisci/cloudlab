@@ -15,6 +15,36 @@ if [[ -b "$SDB" ]]; then
 	HAS_SDB=true
 fi
 
+# --- Create /dev/sda4 if it doesn't exist (some Cloudlab instances lack it) ---
+
+if [[ ! -b "$SDA4" ]]; then
+	echo "$SDA4 not found, creating partition from free space..."
+	# Fix GPT to use all available space if needed
+	if command -v sgdisk >/dev/null 2>&1; then
+		sudo sgdisk -e /dev/sda
+	fi
+	# Find the largest free space region (start and end)
+	read -r FREE_START FREE_END < <(sudo parted -s /dev/sda unit MB print free 2>/dev/null \
+		| awk '/Free Space/{
+			gsub(/MB/,""); s=$1; e=$2; sz=e-s
+			if(sz>max){max=sz; ms=s; me=e}
+		} END{if(max>0) printf "%dMB %dMB\n", ms, me}')
+	if [[ -z "$FREE_START" || -z "$FREE_END" ]]; then
+		echo "Error: no usable free space found on /dev/sda"
+		exit 1
+	fi
+	echo "Creating partition in free space: $FREE_START -> $FREE_END"
+	sudo parted -s /dev/sda mkpart primary ext4 "$FREE_START" "$FREE_END"
+	# Wait for kernel to pick up the new partition
+	sudo partprobe /dev/sda
+	sleep 1
+	if [[ ! -b "$SDA4" ]]; then
+		echo "Error: $SDA4 still not found after partitioning"
+		exit 1
+	fi
+	echo "Created $SDA4"
+fi
+
 # --- Tear down LVM if present ---
 
 if mountpoint -q /tdata 2>/dev/null; then
