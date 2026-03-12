@@ -56,11 +56,18 @@ else
 	echo "rust already installed, skipping installation..."
 fi
 
-cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta stylua
+cargo install ripgrep eza zoxide bat fd-find just du-dust starship git-delta stylua \
+	tokei hyperfine hexyl procs bacon serie cargo-generate tree-sitter-cli dysk
 cargo install --force yazi-build
-cargo install --locked tlrc uv
+cargo install resvg
+cargo install --locked tlrc ripgrep_all uv
 uv tool install ruff
 uv tool install trash-cli
+uv tool install bpytop
+uv tool install speedtest-cli
+uv tool install cmakelang
+uv tool install docutils
+uv tool install git-filter-repo
 
 # yazi plugins
 ya pkg add yazi-rs/plugins:toggle-pane
@@ -84,6 +91,8 @@ fi
 go install github.com/junegunn/fzf@latest
 go install github.com/jesseduffield/lazygit@latest
 go install mvdan.cc/sh/v3/cmd/shfmt@latest
+go install github.com/charmbracelet/glow@latest
+go install github.com/zricethezav/gitleaks/v8@latest
 
 # python3.11
 if ! command -v python3.11 &>/dev/null; then
@@ -109,7 +118,7 @@ if ! command -v nvm &>/dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
 	nvm install 22
 
 	curl -fsSL https://claude.ai/install.sh | bash
-	npm install -g pyright prettier
+	npm install -g pyright prettier prettier-plugin-solidity ccusage
 
 	claude plugin marketplace add anthropics/claude-plugins-official
 	claude plugin install feature-dev@claude-plugins-official
