@@ -40,9 +40,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
 	clang clang-format \
 	libssl-dev \
 	poppler-utils \
-	p7zip-full imagemagick \
-	fastfetch cmatrix \
-	linux-tools-common linux-tools-generic linux-tools-$(uname -r)
+	p7zip-full imagemagick
 
 sudo apt install --reinstall linux-firmware
 
