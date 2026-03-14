@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 GRUB_FILE="/etc/default/grub"
 

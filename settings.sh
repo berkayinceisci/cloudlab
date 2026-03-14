@@ -1,7 +1,10 @@
 #!/bin/bash
+set -euo pipefail
 
-sudo mkdir /dev/hugepages1G
-sudo mount -t hugetlbfs -o pagesize=1G none /dev/hugepages1G
+sudo mkdir -p /dev/hugepages1G
+if ! mountpoint -q /dev/hugepages1G; then
+	sudo mount -t hugetlbfs -o pagesize=1G none /dev/hugepages1G
+fi
 
 sudo modprobe msr
 sudo chmod g+rw /dev/cpu/*/msr

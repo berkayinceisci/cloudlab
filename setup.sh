@@ -5,20 +5,44 @@ if [ -z "$TMUX" ]; then
 	exit 1
 fi
 
+FAILED=()
+
+run_step() {
+	echo "=== Running: $1 ==="
+	if "$@"; then
+		echo "=== $1: OK ==="
+	else
+		echo "=== $1: FAILED (exit code $?) ==="
+		FAILED+=("$1")
+	fi
+}
+
 mkdir -p $HOME/.local
 export PATH="$HOME/.local/bin:$PATH"
 
-./ssh_keys.sh # asks for user input, sets up private/public ssh keys for cloudlab
-./setup_disks.sh
+run_step ./ssh_keys.sh # asks for user input, sets up private/public ssh keys for cloudlab
+run_step ./setup_disks.sh
 export DATA_DIR=/mnt/sda4
 
-./root_packages.sh
-./nonroot_packages.sh
+run_step ./root_packages.sh
+run_step ./nonroot_packages.sh
 
-./benchmarks.sh
+run_step ./benchmarks.sh
 
-./kernels.sh
-./update_grub.sh
+run_step ./kernels.sh
+run_step ./update_grub.sh
 
-./settings.sh
-./crontab.sh
+run_step ./settings.sh
+run_step ./crontab.sh
+
+echo ""
+echo "=============================="
+if [[ ${#FAILED[@]} -eq 0 ]]; then
+	echo "All steps completed successfully"
+else
+	echo "FAILED steps (${#FAILED[@]}):"
+	for step in "${FAILED[@]}"; do
+		echo "  - $step"
+	done
+	exit 1
+fi

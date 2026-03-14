@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 if ! command -v age &>/dev/null; then
 	AGE_VERSION="v1.2.1"
