@@ -13,6 +13,8 @@ sudo modprobe intel_uncore_frequency
 sudo sysctl -w kernel.perf_cpu_time_max_percent=0
 
 . "$HOME/cloudlab/config.sh" || exit
+set +eo pipefail
 check_conf
+set -eo pipefail
 
 echo "Settings are applied"
