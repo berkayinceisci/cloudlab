@@ -1,8 +1,19 @@
 diff --git i/tools/perf/builtin-stat.c w/tools/perf/builtin-stat.c
-index ab40d85fb..ef6fdafa0 100644
+index ab40d85fb..7ce410675 100644
 --- i/tools/perf/builtin-stat.c
 +++ w/tools/perf/builtin-stat.c
-@@ -2696,8 +2696,14 @@ int cmd_stat(int argc, const char **argv)
+@@ -991,6 +991,10 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+	t0 = rdclock();
+	clock_gettime(CLOCK_MONOTONIC, &ref_time);
+
++	if (stat_config.interval && !stat_config.json_output)
++		fprintf(stat_config.output, "# monotonic_ref: %lu.%09lu\n",
++			(unsigned long)ref_time.tv_sec, ref_time.tv_nsec);
++
+ 	if (forks) {
+ 		if (interval || timeout || evlist__ctlfd_initialized(evsel_list))
+ 			status = dispatch_events(forks, timeout, interval, &times);
+@@ -2696,8 +2700,14 @@ int cmd_stat(int argc, const char **argv)
  			return -1;
  		}
  		if (!stat_config.json_output) {
