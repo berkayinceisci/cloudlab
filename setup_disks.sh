@@ -1,25 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
-# Idempotent disk setup: tear down LVM, mount data partition from /dev/sda as ext4.
-# Handles two CloudLab layouts:
-#   - sda has sda4 (or free space to create it): use sda4, optionally sdb as HDD
-#   - sda1 covers entire disk (sdb is OS disk): use sda1 after LVM teardown
+# Idempotent disk setup for CloudLab machines.
+# Handles two layouts:
+#   - Typical: sda=SSD (OS), sdb=HDD → sda4→/mnt/sda4, sdb→/mnt/hdd
+#   - Inverted: sdb=SSD (OS), sda=HDD → sdb4→/mnt/sda4, sda1→/mnt/hdd
+# Detects SSD vs HDD via rotational flag. SSD data partition always gets
+# /mnt/sda4 (DATA_DIR). HDD gets /mnt/hdd. If only one disk, it gets /mnt/sda4.
 # Safe to run on first setup or after OS reset (won't reformat existing ext4).
 
-MNT_DATA="/mnt/sda4"
+MNT_SSD="/mnt/sda4"
 MNT_HDD="/mnt/hdd"
-
-# --- Determine if /dev/sdb is usable as a secondary data disk ---
-# Only use sdb if it exists and is NOT the OS disk
-
-HAS_SDB=false
-if [[ -b /dev/sdb ]]; then
-	ROOT_DISK=$(lsblk -nro PKNAME "$(findmnt -no SOURCE /)" 2>/dev/null || true)
-	if [[ "$ROOT_DISK" != "sdb" ]]; then
-		HAS_SDB=true
-	fi
-fi
 
 # --- Tear down LVM if present (must happen before partition changes) ---
 
@@ -39,65 +30,115 @@ if sudo vgs emulab &>/dev/null; then
 	sudo vgremove -f emulab
 fi
 
-# Remove PVs from sda partitions and sdb (if usable)
-for dev in /dev/sda1 /dev/sda4; do
+# Remove PVs from all potential data partitions
+for dev in /dev/sda /dev/sda1 /dev/sda4 /dev/sdb /dev/sdb4; do
 	if [[ -b "$dev" ]] && sudo pvs "$dev" &>/dev/null; then
 		echo "Removing PV $dev..."
 		sudo pvremove -f "$dev"
 	fi
 done
-if [[ "$HAS_SDB" == "true" ]] && sudo pvs /dev/sdb &>/dev/null; then
-	echo "Removing PV /dev/sdb..."
-	sudo pvremove -f /dev/sdb
-fi
 
-# --- Determine data partition on /dev/sda ---
+# --- Unmount stale mounts from previous runs ---
 
-DATA_DEV=""
-
-if [[ -b /dev/sda4 ]]; then
-	# sda4 already exists
-	DATA_DEV="/dev/sda4"
-else
-	# Try to create sda4 from free space
-	if command -v sgdisk >/dev/null 2>&1; then
-		sudo sgdisk -e /dev/sda
+for mnt in "$MNT_SSD" "$MNT_HDD"; do
+	if mountpoint -q "$mnt" 2>/dev/null; then
+		echo "Unmounting stale $mnt..."
+		sudo umount "$mnt"
 	fi
-	read -r FREE_START FREE_END < <(sudo parted -s /dev/sda unit MB print free 2>/dev/null \
-		| awk '/Free Space/{
-			gsub(/MB/,""); s=$1; e=$2; sz=e-s
-			if(sz>max){max=sz; ms=s; me=e}
-		} END{if(max>0) printf "%dMB %dMB\n", ms, me}') || true
-	if [[ -n "${FREE_START:-}" && -n "${FREE_END:-}" ]]; then
-		echo "Creating /dev/sda4 in free space: $FREE_START -> $FREE_END"
-		sudo parted -s /dev/sda mkpart primary ext4 "$FREE_START" "$FREE_END"
-		sudo partprobe /dev/sda
-		sleep 1
-		if [[ ! -b /dev/sda4 ]]; then
-			echo "Error: /dev/sda4 still not found after partitioning"
-			exit 1
+done
+
+# Remove stale fstab entries (will re-add correct ones later)
+sudo sed -i "\|$MNT_SSD|d" /etc/fstab
+sudo sed -i "\|$MNT_HDD|d" /etc/fstab
+
+# --- Identify OS disk and find data partitions ---
+
+ROOT_DISK=$(lsblk -nro PKNAME "$(findmnt -no SOURCE /)")
+echo "OS disk: /dev/$ROOT_DISK"
+
+# find_data_part DISK IS_OS_DISK
+# Prints the data partition device path for a given disk.
+# OS disk: uses partition 4 (CloudLab convention) or creates it from free space.
+# Non-OS disk: uses partition 1 if it covers the disk.
+find_data_part() {
+	local disk=$1
+	local is_os=$2
+
+	if [[ "$is_os" == "true" ]]; then
+		# OS disk: data partition is partition 4
+		if [[ -b "/dev/${disk}4" ]]; then
+			echo "/dev/${disk}4"
+			return
 		fi
-		DATA_DEV="/dev/sda4"
-	elif [[ -b /dev/sda1 ]]; then
-		# sda1 covers entire disk (LVM already torn down), use it directly
-		echo "/dev/sda4 not available, using /dev/sda1 as data partition"
-		DATA_DEV="/dev/sda1"
+		# Try to create partition 4 from free space
+		if command -v sgdisk >/dev/null 2>&1; then
+			sudo sgdisk -e "/dev/$disk" >&2
+		fi
+		local free_start free_end
+		read -r free_start free_end < <(sudo parted -s "/dev/$disk" unit MB print free 2>/dev/null |
+			awk '/Free Space/{
+				gsub(/MB/,""); s=$1; e=$2; sz=e-s
+				if(sz>max){max=sz; ms=s; me=e}
+			} END{if(max>0) printf "%dMB %dMB\n", ms, me}') || true
+		if [[ -n "${free_start:-}" && -n "${free_end:-}" ]]; then
+			echo "Creating /dev/${disk}4 in free space: $free_start -> $free_end" >&2
+			sudo parted -s "/dev/$disk" mkpart primary ext4 "$free_start" "$free_end" >&2
+			sudo partprobe "/dev/$disk" >&2
+			sleep 1
+			if [[ -b "/dev/${disk}4" ]]; then
+				echo "/dev/${disk}4"
+				return
+			fi
+		fi
 	else
-		echo "Error: no usable partition found on /dev/sda"
-		exit 1
+		# Non-OS disk: use partition 1 if it covers the disk
+		if [[ -b "/dev/${disk}1" ]]; then
+			echo "/dev/${disk}1"
+			return
+		fi
+		# Raw disk (no partitions)
+		echo "/dev/$disk"
+		return
 	fi
-fi
+}
 
-echo "Data partition: $DATA_DEV"
+SSD_PART=""
+HDD_PART=""
+
+for disk in sda sdb; do
+	if [[ ! -b "/dev/$disk" ]]; then
+		continue
+	fi
+
+	local_is_os="false"
+	if [[ "$disk" == "$ROOT_DISK" ]]; then
+		local_is_os="true"
+	fi
+
+	part=$(find_data_part "$disk" "$local_is_os")
+	if [[ -z "$part" ]]; then
+		echo "Warning: no data partition found on /dev/$disk"
+		continue
+	fi
+
+	rota=$(cat "/sys/block/$disk/queue/rotational")
+	if [[ "$rota" -eq 0 ]]; then
+		SSD_PART="$part"
+		echo "SSD data partition: $part (/dev/$disk)"
+	else
+		HDD_PART="$part"
+		echo "HDD data partition: $part (/dev/$disk)"
+	fi
+done
+
+if [[ -z "$SSD_PART" && -z "$HDD_PART" ]]; then
+	echo "Error: no data partitions found"
+	exit 1
+fi
 
 # --- Format if needed (preserves data after OS reset) ---
 
-DEVS=("$DATA_DEV")
-if [[ "$HAS_SDB" == "true" ]]; then
-	DEVS+=("/dev/sdb")
-fi
-
-for dev in "${DEVS[@]}"; do
+for dev in $SSD_PART $HDD_PART; do
 	if ! sudo blkid -s TYPE -o value "$dev" 2>/dev/null | grep -q ext4; then
 		echo "Formatting $dev as ext4..."
 		sudo mkfs.ext4 -F "$dev"
@@ -107,28 +148,28 @@ for dev in "${DEVS[@]}"; do
 done
 
 # --- Mount ---
+# SSD → /mnt/sda4 (primary data dir, used by DATA_DIR)
+# HDD → /mnt/hdd (bulk storage)
+# If only one disk exists, it gets /mnt/sda4 regardless of type.
 
-sudo mkdir -p "$MNT_DATA"
-if [[ "$HAS_SDB" == "true" ]]; then
+if [[ -n "$SSD_PART" ]]; then
+	sudo mkdir -p "$MNT_SSD"
+	echo "Mounting $SSD_PART -> $MNT_SSD"
+	sudo mount "$SSD_PART" "$MNT_SSD"
+	sudo chown "$(id -u):$(id -g)" "$MNT_SSD"
+elif [[ -n "$HDD_PART" ]]; then
+	# No SSD available, use HDD as primary data dir
+	sudo mkdir -p "$MNT_SSD"
+	echo "No SSD data partition, mounting HDD $HDD_PART -> $MNT_SSD"
+	sudo mount "$HDD_PART" "$MNT_SSD"
+	sudo chown "$(id -u):$(id -g)" "$MNT_SSD"
+	HDD_PART="" # already used as primary
+fi
+
+if [[ -n "$HDD_PART" ]]; then
 	sudo mkdir -p "$MNT_HDD"
-fi
-
-if ! mountpoint -q "$MNT_DATA" 2>/dev/null; then
-	echo "Mounting $DATA_DEV -> $MNT_DATA"
-	sudo mount "$DATA_DEV" "$MNT_DATA"
-fi
-
-if [[ "$HAS_SDB" == "true" ]]; then
-	if ! mountpoint -q "$MNT_HDD" 2>/dev/null; then
-		echo "Mounting /dev/sdb -> $MNT_HDD"
-		sudo mount /dev/sdb "$MNT_HDD"
-	fi
-fi
-
-# --- Set ownership ---
-
-sudo chown "$(id -u):$(id -g)" "$MNT_DATA"
-if [[ "$HAS_SDB" == "true" ]]; then
+	echo "Mounting $HDD_PART -> $MNT_HDD"
+	sudo mount "$HDD_PART" "$MNT_HDD"
 	sudo chown "$(id -u):$(id -g)" "$MNT_HDD"
 fi
 
@@ -140,18 +181,15 @@ if grep -q '/tdata' /etc/fstab; then
 	sudo sed -i '\|/tdata|d' /etc/fstab
 fi
 
-# Add UUID-based entries for mounts
-DATA_UUID=$(sudo blkid -s UUID -o value "$DATA_DEV")
-
-if ! grep -q "$MNT_DATA" /etc/fstab; then
-	echo "UUID=$DATA_UUID $MNT_DATA ext4 defaults 0 2" | sudo tee -a /etc/fstab
+# Add UUID-based entries for active mounts
+if mountpoint -q "$MNT_SSD" 2>/dev/null; then
+	SSD_UUID=$(sudo blkid -s UUID -o value "$(findmnt -no SOURCE "$MNT_SSD")")
+	echo "UUID=$SSD_UUID $MNT_SSD ext4 defaults 0 2" | sudo tee -a /etc/fstab
 fi
 
-if [[ "$HAS_SDB" == "true" ]]; then
-	SDB_UUID=$(sudo blkid -s UUID -o value /dev/sdb)
-	if ! grep -q "$MNT_HDD" /etc/fstab; then
-		echo "UUID=$SDB_UUID $MNT_HDD ext4 defaults 0 2" | sudo tee -a /etc/fstab
-	fi
+if mountpoint -q "$MNT_HDD" 2>/dev/null; then
+	HDD_UUID=$(sudo blkid -s UUID -o value "$(findmnt -no SOURCE "$MNT_HDD")")
+	echo "UUID=$HDD_UUID $MNT_HDD ext4 defaults 0 2" | sudo tee -a /etc/fstab
 fi
 
 # --- Remove stale /tdata mount point ---
@@ -161,8 +199,9 @@ if [[ -d /tdata ]] && ! mountpoint -q /tdata 2>/dev/null; then
 	sudo rm -rf /tdata
 fi
 
+echo ""
 echo "Done. Mounts:"
-df -h "$MNT_DATA"
-if [[ "$HAS_SDB" == "true" ]]; then
+df -h "$MNT_SSD"
+if mountpoint -q "$MNT_HDD" 2>/dev/null; then
 	df -h "$MNT_HDD"
 fi
