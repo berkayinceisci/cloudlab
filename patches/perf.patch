@@ -3,8 +3,8 @@ index ab40d85fb..7ce410675 100644
 --- a/tools/perf/builtin-stat.c
 +++ b/tools/perf/builtin-stat.c
 @@ -991,6 +991,10 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
-	t0 = rdclock();
-	clock_gettime(CLOCK_MONOTONIC, &ref_time);
+ 	t0 = rdclock();
+ 	clock_gettime(CLOCK_MONOTONIC, &ref_time);
 
 +	if (stat_config.interval && !stat_config.json_output)
 +		fprintf(stat_config.output, "# monotonic_ref: %lu.%09lu\n",
