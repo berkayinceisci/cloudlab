@@ -27,10 +27,15 @@ export DATA_DIR=/mnt/sda4
 run_step ./root_packages.sh
 run_step ./nonroot_packages.sh
 
-run_step ./benchmarks.sh
+if mountpoint -q "$DATA_DIR" 2>/dev/null; then
+	run_step ./benchmarks.sh
 
-run_step ./kernels.sh
-run_step ./update_grub.sh
+	run_step ./kernels.sh
+	run_step ./update_grub.sh
+else
+	echo "=== Skipping benchmarks.sh, kernels.sh, update_grub.sh (disk setup failed) ==="
+	FAILED+=(./benchmarks.sh ./kernels.sh ./update_grub.sh)
+fi
 
 run_step ./settings.sh
 run_step ./crontab.sh
