@@ -1,7 +1,7 @@
-diff --git i/tools/perf/builtin-stat.c w/tools/perf/builtin-stat.c
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
 index ab40d85fb..7ce410675 100644
---- i/tools/perf/builtin-stat.c
-+++ w/tools/perf/builtin-stat.c
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
 @@ -991,6 +991,10 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
 	t0 = rdclock();
 	clock_gettime(CLOCK_MONOTONIC, &ref_time);
@@ -29,10 +29,10 @@ index ab40d85fb..7ce410675 100644
  		}
  	} else if (output_fd > 0) {
  		mode = append_file ? "a" : "w";
-diff --git i/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json w/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
+diff --git a/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json b/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
 index da46a3aeb..f6043e909 100644
---- i/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
-+++ w/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
+--- a/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
++++ b/tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
 @@ -4850,6 +4850,16 @@
          "UMask": "0x31",
          "Unit": "CHA"
