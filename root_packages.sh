@@ -13,6 +13,7 @@ sudo apt install -y -o Dpkg::Options::="--force-confnew" \
 	htop cpuid \
 	jq progress \
 	numactl libnuma-dev \
+	vmtouch \
 	hwloc \
 	msr-tools \
 	cpufrequtils \
