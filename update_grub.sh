@@ -9,6 +9,6 @@ MENUENTRY=$(grep -oP "menuentry\s+'\K[^']*6\.3\.0\+[^']*" /boot/grub/grub.cfg | 
 sudo sed -i "s/^GRUB_DEFAULT=.*/GRUB_DEFAULT=\"${SUBMENU}>${MENUENTRY}\"/" "$GRUB_FILE"
 
 # Update GRUB_CMDLINE_LINUX_DEFAULT
-sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=yes"/' "$GRUB_FILE"
+sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=yes mitigations=off"/' "$GRUB_FILE"
 
 sudo update-grub
