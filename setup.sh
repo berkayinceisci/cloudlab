@@ -6,14 +6,19 @@ if [ -z "$TMUX" ]; then
 fi
 
 FAILED=()
+declare -A FAIL_LOGS
+LOG_DIR=$(mktemp -d)
 
 run_step() {
+	local log="$LOG_DIR/$(basename "$1").log"
 	echo "=== Running: $1 ==="
-	if "$@"; then
+	if "$@" > >(tee "$log") 2>&1; then
 		echo "=== $1: OK ==="
+		rm -f "$log"
 	else
 		echo "=== $1: FAILED (exit code $?) ==="
 		FAILED+=("$1")
+		FAIL_LOGS["$1"]="$log"
 	fi
 }
 
@@ -49,5 +54,13 @@ else
 	for step in "${FAILED[@]}"; do
 		echo "  - $step"
 	done
+	for step in "${FAILED[@]}"; do
+		if [[ -f "${FAIL_LOGS[$step]}" ]]; then
+			echo ""
+			echo "--- Last 30 lines of $step ---"
+			tail -30 "${FAIL_LOGS[$step]}"
+		fi
+	done
+	rm -rf "$LOG_DIR"
 	exit 1
 fi
