@@ -2,10 +2,12 @@
 set -euo pipefail
 
 cd $HOME/cloudlab
+export PATH="$HOME/.local/bin:$PATH"
 
 # stow
 if ! command -v stow &>/dev/null; then
 	echo "Installing stow..."
+	rm -rf stow-2.3.1 stow-2.3.1.tar.gz
 	wget https://ftp.gnu.org/gnu/stow/stow-2.3.1.tar.gz
 	tar -xzf stow-2.3.1.tar.gz
 	cd stow-2.3.1

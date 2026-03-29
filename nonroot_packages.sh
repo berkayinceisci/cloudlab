@@ -45,8 +45,12 @@ else
 	echo "zsh already installed, skipping..."
 fi
 
-git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosuggestions &>/dev/null
-git clone https://github.com/zsh-users/zsh-syntax-highlighting $HOME/.zsh/zsh-syntax-highlighting &>/dev/null
+if [[ ! -d "$HOME/.zsh/zsh-autosuggestions" ]]; then
+	git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.zsh/zsh-autosuggestions"
+fi
+if [[ ! -d "$HOME/.zsh/zsh-syntax-highlighting" ]]; then
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting "$HOME/.zsh/zsh-syntax-highlighting"
+fi
 
 # rust
 if ! command -v rustc &>/dev/null || ! command -v cargo &>/dev/null; then
@@ -71,8 +75,8 @@ uv tool install docutils
 uv tool install git-filter-repo
 
 # yazi plugins
-ya pkg add yazi-rs/plugins:toggle-pane
-ya pkg add boydaihungst/restore
+ya pkg add yazi-rs/plugins:toggle-pane || true
+ya pkg add boydaihungst/restore || true
 
 # go
 if ! command -v go &>/dev/null; then
@@ -98,6 +102,7 @@ go install github.com/zricethezav/gitleaks/v8@latest
 # python3.11
 if ! command -v python3.11 &>/dev/null; then
 	echo "Installing Python 3.11..."
+	rm -rf Python-3.11.6 Python-3.11.6.tgz
 	wget https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tgz
 	tar xzf Python-3.11.6.tgz
 	(
@@ -132,6 +137,7 @@ fi
 # tmux
 if ! command -v tmux &>/dev/null || [[ "$(tmux -V)" < "tmux 3.3" ]]; then
 	echo "Installing tmux..."
+	rm -rf tmux
 	git clone https://github.com/tmux/tmux.git
 	cd tmux
 	git checkout 3.5a
@@ -144,11 +150,14 @@ else
 	echo "tmux already installed, skipping..."
 fi
 
-git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm &>/dev/null
+if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
+	git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+fi
 
 # neovim
 if ! command -v nvim &>/dev/null; then
 	echo "Installing neovim..."
+	rm -rf neovim
 	git clone https://github.com/neovim/neovim.git
 	cd neovim
 	git checkout stable
