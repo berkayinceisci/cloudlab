@@ -123,13 +123,7 @@ if ! command -v nvm &>/dev/null && [ ! -s "$HOME/.nvm/nvm.sh" ]; then
 	. "$HOME/.nvm/nvm.sh"
 	nvm install 22
 
-	curl -fsSL https://claude.ai/install.sh | bash
-	npm install -g pyright prettier prettier-plugin-solidity ccusage
-
-	claude plugin marketplace add anthropics/claude-plugins-official
-	claude plugin install feature-dev@claude-plugins-official
-	claude plugin install code-review@claude-plugins-official
-	claude plugin install playwright@claude-plugins-official
+	npm install -g pyright prettier prettier-plugin-solidity
 else
 	echo "nvm already installed, skipping..."
 fi
