@@ -25,7 +25,7 @@ if [ ! -d "$HOME/dotfiles" ]; then
 	echo "Setting up dotfiles..."
 	git clone git@github.com:berkayinceisci/dotfiles.git $HOME/dotfiles
 	cd $HOME/dotfiles
-	if ! ./install.sh; then
+	if ! ./bootstrap.sh; then
 		echo "stow failed, removing dotfiles directory..."
 		cd - >/dev/null
 		rm -rf $HOME/dotfiles
